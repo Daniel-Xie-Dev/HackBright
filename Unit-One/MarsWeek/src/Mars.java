@@ -17,7 +17,7 @@ public class Mars {
         meals = meals + (meals * 0.5);
         shipPopulation += 5;
 
-        String landingLocation = "The Hill";
+        String landingLocation = "The Plain";
 
         if (landingLocation.equalsIgnoreCase("The Plain")) {
             System.out.println("Bbzzz Landing on the Plain");
@@ -25,7 +25,7 @@ public class Mars {
             System.out.println("ERROR!!! Flight plan already set. Landing on the Plain");
         }
 
-        landing = landingCheck(2);
+        landing = landingCheck(10);
 
         System.out.println(landing);
 
