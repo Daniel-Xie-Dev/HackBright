@@ -5,3 +5,6 @@ README.md
 \bin
 Unit-Three/java-proj-3/starter/target/classes/hibernate.cfg.xml
 Unit-Three/java-proj-3/starter/src/main/resources/hibernate.cfg.xml
+*.xml
+*.properties
+*.properties
