@@ -1,0 +1,19 @@
+Project Ideas
+
+1. Next Book: A book browsing application that initially recommends a wide selection of highly-rated books. As users browse and provide feed-back for books, a predictive-ai will recommend new highly-rated books that users might find enjoyable.
+
+2. Movie and Show Recommendation:  An application that collects information on all the movies and shows around the world and displays it to the user. The app will display highly-rated media to the user with support for English subtitles being a key feature.
+
+3. Recipe Finder: A simple web application that allows users to search for recipes based on ingredients or keywords. Integrate with an API to fetch recipe data and display them in an organized manner.
+
+4. Expense Tracker: An expense tracking app that helps users keep track of their spending. Allow users to input their expenses, categorize them, and view summarized reports. Can be integrated with Bank apis to categorize spendings into food, clothes, entertainment, and etc.
+
+5. To-Do List App: A to-do list application that allows users to create tasks, mark them as complete, and organize them into different categories or priorities. This will also feature a notification system where users can input timestamps and the application will notify users of their todo.
+
+6. Health and Fitness Guide: A guide that aids the user to maintain a healthier lifestyle through recommendations. The user will provide input regarding their height, weight, food intake, and etc which the application will provide recommendation that will help the user to be more healthy.
+
+7. Music Player: A music player application that allows users to play and manage their music library. Include features like playlist creation, shuffle, and repeat options.
+
+8. Password Manager: A password manager application that helps users securely store and manage their passwords. Include features like password encryption, password generator, and category organization.
+
+9. User Authentication System - An api that developers can use to implement authentication for their own applications.
