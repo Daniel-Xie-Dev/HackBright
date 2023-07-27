@@ -8,3 +8,8 @@ Unit-Three/java-proj-3/starter/src/main/resources/hibernate.cfg.xml
 *.xml
 *.properties
 *.properties
+*.cmd
+*.jar
+*.jar
+Digital-Music-Player/digital_music_player/mvnw
+*.md
