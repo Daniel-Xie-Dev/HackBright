@@ -1,6 +1,9 @@
 package com.server.digital_music_player.Dtos;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.server.digital_music_player.Entities.User;
 
@@ -16,6 +19,8 @@ public class UserDto implements Serializable {
     private Long id;
     private String email;
     private String password;
+    // private Timestamp created_at;
+    private Set<TrackListDto> trackLists = new HashSet<>();
 
     public UserDto(User user) {
         if (user.getId() != null) {
@@ -27,8 +32,12 @@ public class UserDto implements Serializable {
         }
 
         if (user.getPassword() != null) {
-            this.password = null;
+            this.password = user.getPassword();
         }
+
+        // if (user.getCreated_at() != null) {
+        // this.created_at = user.getCreated_at();
+        // }
     }
 
 }

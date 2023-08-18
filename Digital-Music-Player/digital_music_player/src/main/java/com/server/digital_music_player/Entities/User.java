@@ -1,10 +1,21 @@
 package com.server.digital_music_player.Entities;
 
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.server.digital_music_player.Dtos.UserDto;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +38,30 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    // @Column(name = "created_at")
+    // @CreationTimestamp
+    // private Timestamp created_at;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<History> histories = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<TrackList> trackLists = new HashSet<>();
+
+    public User(UserDto userDto) {
+        if (userDto.getEmail() != null) {
+            this.email = userDto.getEmail();
+        }
+
+        if (userDto.getPassword() != null) {
+            this.password = userDto.getPassword();
+        }
+
+        // if (userDto.getCreated_at() != null) {
+        // this.created_at = userDto.getCreated_at();
+        // }
+    }
 
 }

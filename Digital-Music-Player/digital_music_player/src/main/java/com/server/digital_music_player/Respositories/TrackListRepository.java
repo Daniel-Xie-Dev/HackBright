@@ -2,14 +2,15 @@ package com.server.digital_music_player.Respositories;
 
 import org.springframework.stereotype.Repository;
 
+import com.server.digital_music_player.Entities.TrackList;
 import com.server.digital_music_player.Entities.User;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface TrackListRepository extends JpaRepository<TrackList, Long> {
 
-    Optional<User> findByEmail(String email);
+    List<TrackList> findAllTrackListsByUser(User user);
 }

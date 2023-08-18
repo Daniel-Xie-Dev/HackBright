@@ -1,0 +1,12 @@
+.MusicPlayer {
+    position: absolute;
+
+    bottom: 0px;
+}
+
+.MusicPlayerAudio {
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}

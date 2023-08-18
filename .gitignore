@@ -13,3 +13,7 @@ Unit-Three/java-proj-3/starter/src/main/resources/hibernate.cfg.xml
 *.jar
 Digital-Music-Player/digital_music_player/mvnw
 *.md
+node_modules
+*.ico
+*.png
+Digital-Music-Player/music-frontend/public/manifest.json
