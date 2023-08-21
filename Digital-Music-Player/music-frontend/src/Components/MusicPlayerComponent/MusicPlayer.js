@@ -18,6 +18,8 @@ const tracks = [
 function MusicPlayer() {
     const audioRef = useRef();
     const [play, setPlay] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
     const [repeat, setRepeat] = useState(false);
 
     const [int, setInt] = useState(0);
@@ -26,10 +28,18 @@ function MusicPlayer() {
         audioRef.current.volume = e.target.value / 100;
     };
 
+    const handleLoadedMetaData = () => {
+        setDuration(audioRef.current.duration);
+    }
+
     const handleMusicTimestamp = (e) => {
-        audioRef.current.currentTime =
-            Math.floor(audioRef.current.duration) * (e.target.value / 100);
+        audioRef.current.currentTime = parseInt(e.target.value);
+        setCurrentTime(parseInt(e.target.value));
     };
+
+    const handleMusicPlaying = () => {
+        setCurrentTime(audioRef.current.currentTime);
+    }
 
     const handlePausePlay = () => {
         play ? audioRef.current.pause() : audioRef.current.play();
@@ -41,17 +51,13 @@ function MusicPlayer() {
         setRepeat(!repeat);
     };
 
-    const handleTimeStampEvent = () => {
-        console.log("is playing");
-    };
+    // useEffect(() => {
+    //     audioRef.current.addEventListener("play", handleTimeStampEvent);
 
-    useEffect(() => {
-        audioRef.current.addEventListener("play", handleTimeStampEvent);
-
-        return () => {
-            audioRef.current.removeEventListener("play", handleTimeStampEvent);
-        };
-    });
+    //     return () => {
+    //         audioRef.current.removeEventListener("play", handleTimeStampEvent);
+    //     };
+    // });
 
     const handleNextPrevious = (index) => {
         if (int + index >= tracks.length) {
@@ -69,17 +75,24 @@ function MusicPlayer() {
     return (
         <div className="MusicPlayer">
             <div className="MusicPlayerContainer">
-                <audio autoPlay className="MusicPlayerAudio" ref={audioRef}>
+                <audio autoPlay className="MusicPlayerAudio" ref={audioRef} onTimeUpdate={handleMusicPlaying}>
                     <source src={tracks[0]} type="audio/mp3"></source>
                     Your browser does not support audio element.
                 </audio>
 
                 <input
                     type="range"
+                    min={0}
+                    max={duration}
+                    value={currentTime}
+                    step={1}
+                    onLoadedMetadata={handleLoadedMetaData}
                     onChange={(e) => handleMusicTimestamp(e)}
                 ></input>
                 <input
                     type="range"
+                    min={0}
+                    max={100}
                     defaultValue={100}
                     onChange={(e) => handleVolumeChange(e)}
                 ></input>
