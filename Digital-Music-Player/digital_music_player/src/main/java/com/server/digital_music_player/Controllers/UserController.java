@@ -1,7 +1,10 @@
 package com.server.digital_music_player.Controllers;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.server.digital_music_player.Dtos.UserDto;
 import com.server.digital_music_player.Services.UserService;
 
+// @CrossOrigin(origins = "http:/localhost:3000")
 @RestController
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
@@ -29,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public String loginUser(@RequestBody UserDto userDto) {
+    public ArrayList<String> loginUser(@RequestBody UserDto userDto) {
         return userService.userLogin(userDto);
     }
 

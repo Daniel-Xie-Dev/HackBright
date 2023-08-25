@@ -1,6 +1,7 @@
 package com.server.digital_music_player.Services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,9 @@ import java.util.Optional;
 import javax.sound.midi.Track;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.server.digital_music_player.Dtos.TrackListDto;
@@ -43,16 +47,17 @@ public class TrackListServiceImpl implements TrackListService {
 
     @Override
     @Transactional
-    public String addTrackListToUser(Long userId, String trackListTitle) {
+    public List<String> addTrackListToUser(Long userId, String trackListTitle) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             TrackList trackList = new TrackList();
             trackList.setTrackTitle(trackListTitle);
             trackList.setUser(userOptional.get());
-            trackListRepository.saveAndFlush(trackList);
-            return "success";
+            Long id = trackListRepository.saveAndFlush(trackList).getId();
+
+            return new ArrayList<String>(Arrays.asList(String.valueOf(id), trackListTitle));
         }
-        return "no such user found!";
+        return Collections.emptyList();
     }
 
     @Override

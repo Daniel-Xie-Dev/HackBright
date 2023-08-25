@@ -17,3 +17,4 @@ node_modules
 *.ico
 *.png
 Digital-Music-Player/music-frontend/public/manifest.json
+Digital-Music-Player/music-frontend/src/.env

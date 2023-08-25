@@ -1,5 +1,6 @@
 package com.server.digital_music_player.Services;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,15 +42,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String userLogin(UserDto userDto) {
+    public ArrayList<String> userLogin(UserDto userDto) {
         Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
+        ArrayList<String> response = new ArrayList<>();
         if (userOptional.isPresent()) {
             if (passwordEncoder.matches(userDto.getPassword(), userOptional.get().getPassword())) {
-                return "success";
+                response.add("Success");
+                response.add(String.valueOf(userOptional.get().getId()));
+                response.add(userOptional.get().getEmail());
+                return response;
             }
-            return "failure";
         }
-        return "failure";
+        response.add("Failure");
+        return response;
     }
 
 }

@@ -1,14 +1,14 @@
 import React from "react";
 import "./Tracklist.css";
-import { Button } from "react-bootstrap";
 import { MusicNoteList } from "react-bootstrap-icons";
 
 function Tracklist() {
+    // const navigate = useNavigate();
     return (
         <div className="Tracklist">
-            <Button>
-                <MusicNoteList>asdfa</MusicNoteList>
-            </Button>
+            <a href="/tracklist">
+                <MusicNoteList></MusicNoteList>
+            </a>
         </div>
     );
 }

@@ -9,6 +9,7 @@ import {
     Repeat,
     Repeat1,
 } from "react-bootstrap-icons";
+import axios from "axios";
 
 const tracks = [
     "https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg",
@@ -21,25 +22,39 @@ function MusicPlayer() {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [repeat, setRepeat] = useState(false);
-
     const [int, setInt] = useState(0);
+    const [playlist, setPlaylist] = useState([]);
 
     const handleVolumeChange = (e) => {
         audioRef.current.volume = e.target.value / 100;
     };
 
     const handleLoadedMetaData = () => {
-        setDuration(audioRef.current.duration);
-    }
+        // console.log(Math.ceil(audioRef.current.duration));
+        console.log("hello");
+        setDuration(Math.floor(audioRef.current.duration));
+
+        // audioRef.current.play();
+    };
+
+    const handleMusicMouseUp = (e) => {
+        setPlay(() => {
+            return true;
+        });
+        audioRef.current.play();
+    };
 
     const handleMusicTimestamp = (e) => {
+        setPlay(false);
+        audioRef.current.pause();
         audioRef.current.currentTime = parseInt(e.target.value);
         setCurrentTime(parseInt(e.target.value));
+        // console.log(e.target.value);
     };
 
     const handleMusicPlaying = () => {
         setCurrentTime(audioRef.current.currentTime);
-    }
+    };
 
     const handlePausePlay = () => {
         play ? audioRef.current.pause() : audioRef.current.play();
@@ -47,7 +62,7 @@ function MusicPlayer() {
     };
 
     const handleRepeat = () => {
-        audioRef.current.loop = repeat ? false : true;
+        audioRef.current.loop = !repeat;
         setRepeat(!repeat);
     };
 
@@ -60,23 +75,49 @@ function MusicPlayer() {
     // });
 
     const handleNextPrevious = (index) => {
-        if (int + index >= tracks.length) {
+        setPlay(() => {
+            return false;
+        });
+        if (int + index >= playlist.length) {
             setInt(0);
-            audioRef.current.src = tracks[0];
+            audioRef.current.src = playlist[0].preview;
         } else if (int + index < 0) {
-            setInt(tracks.length - 1);
-            audioRef.current.src = tracks[tracks.length - 1];
+            setInt(playlist.length - 1);
+            audioRef.current.src = playlist[playlist.length - 1].preview;
         } else {
             setInt(int + index);
-            audioRef.current.src = tracks[int + index];
+            audioRef.current.src = playlist[int + index].preview;
         }
+        // setPlay(true);
     };
+
+    useEffect(() => {
+        const getSongs = async () => {
+            const result = await axios.request(options);
+            // console.log(result.data.data);
+            setPlaylist(() => {
+                audioRef.current.src = result.data.data[0].preview;
+                return result.data.data;
+            });
+        };
+
+        getSongs();
+    }, []);
 
     return (
         <div className="MusicPlayer">
             <div className="MusicPlayerContainer">
-                <audio autoPlay className="MusicPlayerAudio" ref={audioRef} onTimeUpdate={handleMusicPlaying}>
-                    <source src={tracks[0]} type="audio/mp3"></source>
+                <audio
+                    // autoPlay
+                    className="MusicPlayerAudio"
+                    ref={audioRef}
+                    loop={repeat}
+                    onTimeUpdate={handleMusicPlaying}
+                    onLoadedMetadata={handleLoadedMetaData}
+                    onEnded={() => handleNextPrevious(1)}
+                >
+                    {/* {console.log(playlist)} */}
+                    <source type="audio/mp3"></source>
                     Your browser does not support audio element.
                 </audio>
 
@@ -86,8 +127,8 @@ function MusicPlayer() {
                     max={duration}
                     value={currentTime}
                     step={1}
-                    onLoadedMetadata={handleLoadedMetaData}
-                    onChange={(e) => handleMusicTimestamp(e)}
+                    onChange={handleMusicTimestamp}
+                    onMouseUp={handleMusicMouseUp}
                 ></input>
                 <input
                     type="range"

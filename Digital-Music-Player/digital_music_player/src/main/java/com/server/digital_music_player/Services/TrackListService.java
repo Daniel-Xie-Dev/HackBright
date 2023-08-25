@@ -8,7 +8,7 @@ public interface TrackListService {
 
     List<TrackListDto> getAllTrackListByUser(Long userId);
 
-    String addTrackListToUser(Long userId, String trackListTitle);
+    List<String> addTrackListToUser(Long userId, String trackListTitle);
 
     String deleteTrackList(Long trackListId);
 
