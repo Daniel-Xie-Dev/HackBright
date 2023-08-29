@@ -1,0 +1,18 @@
+.screen-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background: radial-gradient(
+        ellipse at center,
+        #4f8ea5 0%,
+        #343f53 50%,
+        #1c1b26 100%
+    );
+}
+
+/* .screen-container{
+    position: relative;
+    background: black;
+    width: 100%;
+    padding: 1rem;
+} */
