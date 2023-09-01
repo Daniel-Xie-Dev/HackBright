@@ -36,6 +36,9 @@ public class User {
     @Column(unique = true, name = "email")
     private String email;
 
+    @Column(unique = true, name = "username")
+    private String username;
+
     @Column(name = "password")
     private String password;
 
@@ -53,6 +56,10 @@ public class User {
     public User(UserDto userDto) {
         if (userDto.getEmail() != null) {
             this.email = userDto.getEmail();
+        }
+
+        if(userDto.getUsername() != null){
+            this.username = userDto.getUsername();
         }
 
         if (userDto.getPassword() != null) {

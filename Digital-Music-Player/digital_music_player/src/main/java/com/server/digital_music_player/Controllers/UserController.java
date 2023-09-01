@@ -1,6 +1,7 @@
 package com.server.digital_music_player.Controllers;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "/register")
-    public String registerUser(@RequestBody UserDto userDto) {
+    public Optional<UserDto> registerUser(@RequestBody UserDto userDto) {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         userDto.setPassword(encodedPassword);
         return userService.addUser(userDto);
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public ArrayList<String> loginUser(@RequestBody UserDto userDto) {
+    public Optional<UserDto> loginUser(@RequestBody UserDto userDto) {
         return userService.userLogin(userDto);
     }
 

@@ -18,6 +18,7 @@ public class UserDto implements Serializable {
 
     private Long id;
     private String email;
+    private String username;
     private String password;
     // private Timestamp created_at;
     private Set<TrackListDto> trackLists = new HashSet<>();
@@ -31,9 +32,13 @@ public class UserDto implements Serializable {
             this.email = user.getEmail();
         }
 
-        if (user.getPassword() != null) {
-            this.password = user.getPassword();
+        if (user.getUsername() != null){
+            this.username = user.getUsername();
         }
+//
+//        if (user.getPassword() != null) {
+//            this.password = user.getPassword();
+//        }
 
         // if (user.getCreated_at() != null) {
         // this.created_at = user.getCreated_at();
