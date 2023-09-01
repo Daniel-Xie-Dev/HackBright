@@ -10,14 +10,15 @@ import {
 
 import { MdReplayCircleFilled } from "react-icons/md";
 import axios from "axios";
+import { useAppContext } from "../../GlobalContext";
 
 const options = {
     method: "GET",
     url: "https://deezerdevs-deezer.p.rapidapi.com/search",
     params: { q: "pokemon" },
     headers: {
-        "X-RapidAPI-Key": "677047b564msh609f18b083bb806p1f2ef4jsn7f48922985dc",
-        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+        "X-RapidAPI-Host": process.env.REACT_APP_HOST,
     },
 };
 
@@ -27,9 +28,10 @@ function MusicPlayer() {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isRepeating, setIsRepeating] = useState(false);
-    const [int, setInt] = useState(0);
-    const [playlist, setPlaylist] = useState([]);
 
+    const { playlist, playlistIndex, setPlaylistIndex } = useAppContext();
+
+    // console.log(playlistIndex);
     const handleVolumeChange = (e) => {
         audioRef.current.volume = e.target.value / 100;
     };
@@ -69,11 +71,12 @@ function MusicPlayer() {
     };
 
     const handleMusicPlaying = () => {
+        console.log(audioRef.current.currentSrc);
         setCurrentTime(Math.floor(audioRef.current.currentTime));
     };
 
     const handleNextPrevious = (index) => {
-        setInt((initialValue) => {
+        setPlaylistIndex((initialValue) => {
             const playlistIndex =
                 initialValue + index < 0
                     ? playlist.length - 1
@@ -84,17 +87,10 @@ function MusicPlayer() {
     };
 
     useEffect(() => {
-        const getSongs = async () => {
-            const result = await axios.request(options);
-            setPlaylist(() => {
-                audioRef.current.src = result.data.data[0].preview;
-                // console.log(result.data.data);
-                return result.data.data;
-            });
-        };
-
-        getSongs();
-    }, []);
+        if (playlist.length !== 0) {
+            audioRef.current.src = playlist[playlistIndex].preview;
+        }
+    }, [playlist, playlistIndex]);
 
     return (
         <div className="music-player">
@@ -103,31 +99,38 @@ function MusicPlayer() {
                     {playlist.length !== 0 ? (
                         <>
                             <div className="image-container">
-                                <img src={playlist[int].album.cover} alt="" />
+                                <img
+                                    src={playlist[playlistIndex].album.cover}
+                                    alt=""
+                                />
                             </div>
                             <div className="song-description">
-                                <p className="song-title">{playlist[int].title}</p>
-                                <p className="artist">{playlist[int].artist.name}</p>
+                                <p className="song-title">
+                                    {playlist[playlistIndex].title}
+                                </p>
+                                <p className="artist">
+                                    {playlist[playlistIndex].artist.name}
+                                </p>
                             </div>
+                            <audio
+                                autoPlay={isPlaying}
+                                className="MusicPlayerAudio"
+                                ref={audioRef}
+                                loop={isRepeating}
+                                onTimeUpdate={handleMusicPlaying}
+                                onLoadedMetadata={handleLoadedMetaData}
+                                onEnded={() => handleNextPrevious(1)}
+                            >
+                                <source type="audio/mp3" />
+                                Your browser does not support audio element.
+                            </audio>
                         </>
                     ) : (
                         <></>
                     )}
                 </div>
             </div>
-            <audio
-                autoPlay={isPlaying}
-                className="MusicPlayerAudio"
-                ref={audioRef}
-                loop={isRepeating}
-                onTimeUpdate={handleMusicPlaying}
-                onLoadedMetadata={handleLoadedMetaData}
-                onEnded={() => handleNextPrevious(1)}
-            >
-                {/* {console.log(playlist)} */}
-                <source type="audio/mp3"></source>
-                Your browser does not support audio element.
-            </audio>
+
             <div className="progress-controller">
                 <div className="control-buttons">
                     <i>

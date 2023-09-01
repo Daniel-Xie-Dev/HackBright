@@ -10,16 +10,25 @@ import { BiSolidPlaylist } from "react-icons/bi";
 import { BsFillArrowRightSquareFill } from "react-icons/bs";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { Navigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Sidebar() {
     // const [image, setImage] = useState("");
     /**logic here to get user information (image) to backend API after successful user login
      * then set user image*/
+    const [_, setCookies] = useCookies();
+
     const navigate = useNavigate();
 
     const handleUserProfile = () => {
         navigate("/profile");
     };
+
+    const handleSignout = () => {
+        setCookies("user", null);
+        navigate("/login");
+    };
+
     return (
         <div className="sidebar-container">
             <img
@@ -48,8 +57,9 @@ export default function Sidebar() {
             <div className="setting-buttons">
                 <SideBarButton
                     title="Sign Out"
-                    to="/signout"
+                    to="/login"
                     icon={<BsFillArrowRightSquareFill />}
+                    callback={handleSignout}
                 />
                 {/* <SideBarButton title="Log In" to="/login" icon={< BsFillArrowLeftSquareFill />} /> */}
             </div>
