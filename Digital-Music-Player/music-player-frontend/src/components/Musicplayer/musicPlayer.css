@@ -11,16 +11,17 @@
     height: 6em;
     padding: 1em;
     color: #ddd;
+    width: 100%;
 }
 
 .song-bar {
-    position: absolute;
+    /* position: absolute; */
     left: 3em;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    width: 30%;
+    /* width: 100%; */
 }
 
 .song-infos {

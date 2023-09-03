@@ -23,9 +23,10 @@ export default function Login() {
                 }
             )
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.data) {
                     setCookies("user", response.data);
+                    console.log(response.data);
                 }
             })
             .catch((error) => console.log(error));

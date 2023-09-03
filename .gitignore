@@ -21,3 +21,14 @@ Unit-Four/java-proj-4/starter/src/main/resources/hibernate.cfg.xml
 Unit-Four/java-proj-4/starter/target/classes/hibernate.cfg.xml
 Digital-Music-Player/music-player-frontend/public/manifest.json
 Digital-Music-Player/music-player-frontend/.env
+Digital-Music-Player/digital_music_player/.idea/workspace.xml
+Digital-Music-Player/digital_music_player/.idea/compiler.xml
+Digital-Music-Player/digital_music_player/.idea/encodings.xml
+Digital-Music-Player/digital_music_player/.idea/jarRepositories.xml
+Digital-Music-Player/digital_music_player/.idea/misc.xml
+Digital-Music-Player/digital_music_player/.idea/vcs.xml
+Digital-Music-Player/digital_music_player/target/classes/application.properties
+Digital-Music-Player/digital_music_player/src/main/resources/application.properties
+Digital-Music-Player/digital_music_player/target/classes/application.properties
+Digital-Music-Player/digital_music_player/src/main/resources/application.properties
+*.properties

@@ -15,7 +15,6 @@ export default function SearchResult() {
         setPlaylistIndex(input);
     };
 
-    console.log(result);
     useEffect(() => {
         const getAllSongsByQuery = async () => {
             axios
@@ -43,10 +42,10 @@ export default function SearchResult() {
     }, [query]);
 
     return (
-        <div className="searchresult">
+        <div className="search-result">
             {result.map((item, index) => {
                 return (
-                    <div key={item.id} onClick={() => handlePlaylist(index)}>
+                    <div className="music-card" key={item.id} onClick={() => handlePlaylist(index)}>
                         <div className="image-container">
                             <img src={item.album.cover} alt="" />
                         </div>

@@ -36,6 +36,12 @@ public class History {
     // @CreationTimestamp
     // private Timestamp createdAt;
 
+    @Column(name = "artist")
+    private String artist;
+
+    @Column(name = "genre")
+    private String genre;
+
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "user_id")
