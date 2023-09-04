@@ -10,24 +10,29 @@ import SearchResult from "./components/SearchResult/SearchResult";
 import { useEffect } from "react";
 import axios from "axios";
 import { useAppContext } from "./GlobalContext";
+import Homepage from "./components/Homepage/Homepage";
 
 function App() {
     const [cookies] = useCookies(["user"]);
-    const {setLikedMusiclist} = useAppContext();
+    const { setLikedMusiclist } = useAppContext();
 
     useEffect(() => {
         const getAllLikedMusicByUser = async () => {
-            await axios.get(`http://localhost:8080/api/v1/liked-music/getAllLikedMusic/${cookies.user.id}`)
-            .then(response => {
-                setLikedMusiclist(response.data);
-                console.log(response.data);
-            }).catch(err => console.log(err));
-        }
+            await axios
+                .get(
+                    `http://localhost:8080/api/v1/liked-music/getAllLikedMusic/${cookies.user.id}`
+                )
+                .then((response) => {
+                    setLikedMusiclist(response.data);
+                    console.log(response.data);
+                })
+                .catch((err) => console.log(err));
+        };
 
-        if(cookies.user){
+        if (cookies.user) {
             getAllLikedMusicByUser();
         }
-    }, [])
+    }, []);
 
     return (
         <Router>
@@ -37,6 +42,7 @@ function App() {
                 <div className="screen-container">
                     {cookies.user ? <Searchbar /> : <></>}
                     <Routes>
+                        <Route path="/" element={<Homepage />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route
