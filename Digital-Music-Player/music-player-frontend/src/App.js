@@ -5,12 +5,13 @@ import MusicPlayer from "./components/Musicplayer/Musicplayer";
 import Searchbar from "./components/Searchbar/Searchbar";
 import Login from "./components/Forms/Login";
 import Signup from "./components/Forms/Signup";
-import { useCookies } from "react-cookie";
 import SearchResult from "./components/SearchResult/SearchResult";
-import { useEffect } from "react";
 import axios from "axios";
-import { useAppContext } from "./GlobalContext";
 import Homepage from "./components/Homepage/Homepage";
+import Dashboard from "./components/Dashboard/Dashboard";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useAppContext } from "./GlobalContext";
 
 function App() {
     const [cookies] = useCookies(["user"]);
@@ -37,12 +38,13 @@ function App() {
     return (
         <Router>
             <div className="main-body">
-                {cookies.user ? <Sidebar /> : <></>}
+                <Sidebar />
 
                 <div className="screen-container">
                     {cookies.user ? <Searchbar /> : <></>}
                     <Routes>
                         <Route path="/" element={<Homepage />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route

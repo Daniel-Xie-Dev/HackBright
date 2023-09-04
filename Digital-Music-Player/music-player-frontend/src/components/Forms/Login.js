@@ -2,11 +2,13 @@ import React, { useRef } from "react";
 import "./form.css";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const usernameOrEmailRef = useRef();
     const passwordRef = useRef();
     const [_, setCookies] = useCookies();
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -26,7 +28,8 @@ export default function Login() {
                 // console.log(response);
                 if (response.data) {
                     setCookies("user", response.data);
-                    console.log(response.data);
+                    // console.log(response.data);
+                    navigate("/dashboard");
                 }
             })
             .catch((error) => console.log(error));

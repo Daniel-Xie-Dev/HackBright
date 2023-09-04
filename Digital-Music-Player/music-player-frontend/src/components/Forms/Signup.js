@@ -2,11 +2,14 @@ import React, { useRef } from "react";
 import "./form.css";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
     const usernameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
+
+    const navigate = useNavigate();
 
     const [_, setCookies] = useCookies();
 
@@ -27,6 +30,7 @@ export default function Signup() {
                 if (response.data) {
                     setCookies("user", response.data);
                 }
+                navigate("/dashboard");
                 console.log(response);
             })
             .catch((error) => console.log(error));

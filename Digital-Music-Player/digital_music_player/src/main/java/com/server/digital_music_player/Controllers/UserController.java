@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.server.digital_music_player.Dtos.UserDto;
 import com.server.digital_music_player.Services.UserService;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@CrossOrigin(origins = "http://localhost:3001")
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
 
