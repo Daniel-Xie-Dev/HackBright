@@ -12,10 +12,11 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useAppContext } from "./GlobalContext";
+import Library from "./components/Library/Library";
 
 function App() {
     const [cookies] = useCookies(["user"]);
-    const { setLikedMusiclist } = useAppContext();
+    const { setLibrary, likedMusiclist, setLikedMusiclist } = useAppContext();
 
     useEffect(() => {
         const getAllLikedMusicByUser = async () => {
@@ -24,16 +25,54 @@ function App() {
                     `http://localhost:8080/api/v1/liked-music/getAllLikedMusic/${cookies.user.id}`
                 )
                 .then((response) => {
-                    setLikedMusiclist(response.data);
-                    console.log(response.data);
+                    setLikedMusiclist(() => {
+                        let tempMap = new Map();
+                        for (let object of response.data) {
+                            tempMap.set(object.api, object.id);
+                        }
+                        // console.log(response);
+                        return tempMap;
+                    });
+                    changeLikedMusicToObect();
                 })
                 .catch((err) => console.log(err));
+        };
+
+        const changeLikedMusicToObect = async () => {
+            let promises = [];
+            let data = [];
+            for (let object of likedMusiclist) {
+                promises.push(
+                    axios
+                        .get(
+                            `https://deezerdevs-deezer.p.rapidapi.com/track/${object[0]}`,
+                            {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+                                    "X-RapidAPI-Host": process.env.REACT_APP_HOST,
+                                },
+                            }
+                        )
+                        .then((response) => {
+                            data.push(response.data);
+                        })
+                        .catch((error) => console.log(error))
+                );
+            }
+            Promise.all(promises).then(() => {
+                setLibrary(() => {
+                    // console.log(data);
+                    return [...data];
+                });
+            });
         };
 
         if (cookies.user) {
             getAllLikedMusicByUser();
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cookies.user]);
 
     return (
         <Router>
@@ -47,6 +86,7 @@ function App() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
+                        <Route path="/library" element={<Library />} />
                         <Route
                             path="/search/result/:query"
                             element={<SearchResult />}

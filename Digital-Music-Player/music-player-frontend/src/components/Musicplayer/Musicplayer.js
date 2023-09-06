@@ -1,30 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./musicPlayer.css";
 import {
-    AiOutlineLike,
+    // AiOutlineLike,
     AiFillStepBackward,
     AiFillStepForward,
     AiFillPlayCircle,
     AiFillPauseCircle,
     AiOutlineHeart,
-    AiFillHeart
+    AiFillHeart,
 } from "react-icons/ai";
-
 
 import { MdReplayCircleFilled } from "react-icons/md";
 import axios from "axios";
 import { useAppContext } from "../../GlobalContext";
 import { useCookies } from "react-cookie";
-
-// const options = {
-//     method: "GET",
-//     url: "https://deezerdevs-deezer.p.rapidapi.com/search",
-//     params: { q: "pokemon" },
-//     headers: {
-//         "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
-//         "X-RapidAPI-Host": process.env.REACT_APP_HOST,
-//     },
-// };
 
 function MusicPlayer() {
     const audioRef = useRef();
@@ -34,20 +23,29 @@ function MusicPlayer() {
     const [isRepeating, setIsRepeating] = useState(false);
     const [cookies] = useCookies();
 
-    const { playlist, playlistIndex, setPlaylistIndex, likedMusiclist, setLikedMusiclist } = useAppContext();
+    const {
+        playlist,
+        playlistIndex,
+        setPlaylistIndex,
+        setLibrary,
+        likedMusiclist,
+        setLikedMusiclist,
+    } = useAppContext();
 
     const isPlaylistEmpty = playlist.length === 0;
 
     // console.log(likedMusiclist)
-    const handleVolumeChange = (e) => {
-        audioRef.current.volume = e.target.value / 100;
-    };
+    // const handleVolumeChange = (e) => {
+    //     audioRef.current.volume = e.target.value / 100;
+    // };
 
     const handlePlayPause = () => {
-        setIsPlaying((value) => {
-            value ? audioRef.current.pause() : audioRef.current.play();
-            return !value;
-        });
+        if (audioRef.current) {
+            setIsPlaying((value) => {
+                value ? audioRef.current.pause() : audioRef.current.play();
+                return !value;
+            });
+        }
     };
 
     const handleRepeat = () => {
@@ -93,54 +91,76 @@ function MusicPlayer() {
         });
     };
 
-    const isLiked = () => {
-        if(isPlaylistEmpty){
-            return false;
-        }
+    // const isLiked = () => {
+    //     if (isPlaylistEmpty) {
+    //         return false;
+    //     }
 
-        for(let likedMusicObject of likedMusiclist){
-            if(likedMusicObject.api === playlist[playlistIndex].id){
-                return true;
-            }
-        }
-        return false;
-    }
+    //     for (let likedMusicObject of likedMusiclist) {
+    //         if (likedMusicObject.api === playlist[playlistIndex].id) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
 
-   
-    const handleMusicLike = async () => {
-        await axios.post(`http://localhost:8080/api/v1/liked-music/addLikedMusic/${cookies.user.id}`, {
-            api : `${playlist[playlistIndex].id}`
-        }, 
-        {
-            headers: { "Content-Type": "application/json" },
-        }).then((response) => {
-            if(response.data){
-                setLikedMusiclist([...likedMusiclist, response.data]);
-            }
-        }).catch(error => console.log(error));
+    const handleMusicLike = async (musicObject) => {
+        console.log(musicObject);
+        await axios
+            .post(
+                `http://localhost:8080/api/v1/liked-music/addLikedMusic/${cookies.user.id}`,
+                {
+                    api: `${playlist[playlistIndex].id}`,
+                },
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            )
+            .then((response) => {
+                if (response.data) {
+                    setLikedMusiclist((prevMap) => {
+                        prevMap.set(musicObject.id, response.data.id);
+                        return new Map(prevMap);
+                    });
+                    setLibrary((prev) => {
+                        return [...prev, musicObject];
+                    });
+                }
+            })
+            .catch((error) => console.log(error));
 
         // console.log("ASDFADSADFSSf")
-    }
+    };
 
     const handleMusicUnlike = async () => {
         const id = playlist[playlistIndex].id;
 
-        for(let i = 0; i < likedMusiclist.length; i++){
-            if(likedMusiclist[i].api === id){
-                await axios.delete(`http://localhost:8080/api/v1/liked-music/deleteLikedMusic/${likedMusiclist[i].id}`, {
+        console.log(id);
+        console.log(likedMusiclist);
+
+        await axios
+            .delete(
+                `http://localhost:8080/api/v1/liked-music/deleteLikedMusic/${likedMusiclist.get(
+                    id
+                )}`,
+                {
                     headers: { "Content-Type": "application/json" },
-                }).then(response => {
-                    if(response.data){
-                        // console.log(response.data);
-                        setLikedMusiclist(prevList => {
-                            return prevList.filter((item) => item.id !== response.data.id);
-                        })
-                    }
-                }).catch(error => console.log(error));
-                break;
-            }
-        }
-    }
+                }
+            )
+            .then((response) => {
+                if (response.data) {
+                    // console.log(response.data);
+                    setLikedMusiclist((prevMap) => {
+                        prevMap.delete(id);
+                        return prevMap;
+                    });
+                }
+            });
+
+        setLibrary((prevLibrary) => {
+            return prevLibrary.filter((item) => item.id !== id);
+        });
+    };
 
     useEffect(() => {
         if (playlist.length !== 0) {
@@ -190,14 +210,34 @@ function MusicPlayer() {
             <div className="progress-controller">
                 <div className="control-buttons">
                     <i>
-                        {
-                            isLiked() ? 
-                            <AiFillHeart onClick={isPlaylistEmpty ? undefined : handleMusicUnlike} /> : 
-                            <AiOutlineHeart onClick={isPlaylistEmpty ? undefined : handleMusicLike} />
-                        }
+                        {!isPlaylistEmpty &&
+                        likedMusiclist.has(playlist[playlistIndex].id) ? (
+                            <AiFillHeart
+                                onClick={
+                                    isPlaylistEmpty ? undefined : handleMusicUnlike
+                                }
+                            />
+                        ) : (
+                            <AiOutlineHeart
+                                onClick={
+                                    isPlaylistEmpty
+                                        ? undefined
+                                        : () =>
+                                              handleMusicLike(
+                                                  playlist[playlistIndex]
+                                              )
+                                }
+                            />
+                        )}
                     </i>
                     <i>
-                        <AiFillStepBackward onClick={isPlaylistEmpty ? undefined : () => handleNextPrevious(-1)} />
+                        <AiFillStepBackward
+                            onClick={
+                                isPlaylistEmpty
+                                    ? undefined
+                                    : () => handleNextPrevious(-1)
+                            }
+                        />
                     </i>
                     <i className="play-pause">
                         {isPlaying ? (
@@ -207,29 +247,34 @@ function MusicPlayer() {
                         )}
                     </i>
                     <i>
-                        <AiFillStepForward onClick={isPlaylistEmpty ? undefined : () =>  handleNextPrevious(1)} />
+                        <AiFillStepForward
+                            onClick={
+                                isPlaylistEmpty
+                                    ? undefined
+                                    : () => handleNextPrevious(1)
+                            }
+                        />
                     </i>
                     <i>
                         <MdReplayCircleFilled onClick={handleRepeat} />
                     </i>
                     <div className="progress-container">
-                    <span>{currentTime}</span>
-                    {/* <div className="progress-bar">
+                        <span>{currentTime}</span>
+                        {/* <div className="progress-bar">
                             <div className="progress"></div>
                         </div> */}
-                    <input
-                        type="range"
-                        value={currentTime}
-                        max={duration}
-                        step={1}
-                        onMouseDown={handleMusicMouseDown}
-                        onChange={handleMusicTimestamp}
-                        onMouseUp={handleMusicMouseUp}
-                    ></input>
-                    <span>{duration}</span>
+                        <input
+                            type="range"
+                            value={currentTime}
+                            max={duration}
+                            step={1}
+                            onMouseDown={handleMusicMouseDown}
+                            onChange={handleMusicTimestamp}
+                            onMouseUp={handleMusicMouseUp}
+                        ></input>
+                        <span>{duration}</span>
+                    </div>
                 </div>
-                </div>
-                
             </div>
         </div>
     );

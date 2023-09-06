@@ -15,7 +15,7 @@ import com.server.digital_music_player.Dtos.UserDto;
 import com.server.digital_music_player.Services.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
 

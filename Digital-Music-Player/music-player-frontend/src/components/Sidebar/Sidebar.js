@@ -16,7 +16,7 @@ export default function Sidebar() {
     // const [image, setImage] = useState("");
     /**logic here to get user information (image) to backend API after successful user login
      * then set user image*/
-    const [_, setCookies] = useCookies();
+    const [cookies, setCookies] = useCookies();
 
     const navigate = useNavigate();
 
@@ -43,24 +43,36 @@ export default function Sidebar() {
                     to="/dashboard"
                     icon={<AiFillHome />}
                 />
-                <SideBarButton
+                {/* <SideBarButton
                     title="Trending"
                     to="/trending"
                     icon={<BiTrendingUp />}
-                />
-                <SideBarButton
-                    title="Library"
-                    to="/library"
-                    icon={<BiSolidPlaylist />}
-                />
+                /> */}
+                {cookies.user ? (
+                    <SideBarButton
+                        title="Library"
+                        to="/library"
+                        icon={<BiSolidPlaylist />}
+                    />
+                ) : (
+                    <></>
+                )}
             </div>
             <div className="setting-buttons">
-                <SideBarButton
-                    title="Sign Out"
-                    to="/login"
-                    icon={<BsFillArrowRightSquareFill />}
-                    callback={handleSignout}
-                />
+                {cookies.user ? (
+                    <SideBarButton
+                        title="Sign Out"
+                        to="/login"
+                        icon={<BsFillArrowRightSquareFill />}
+                        callback={handleSignout}
+                    />
+                ) : (
+                    <SideBarButton
+                        title="Sign In"
+                        to="/login"
+                        icon={<BsFillArrowRightSquareFill />}
+                    />
+                )}
                 {/* <SideBarButton title="Log In" to="/login" icon={< BsFillArrowLeftSquareFill />} /> */}
             </div>
         </div>

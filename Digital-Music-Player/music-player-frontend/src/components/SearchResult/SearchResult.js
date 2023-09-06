@@ -27,7 +27,7 @@ export default function SearchResult() {
                     },
                 })
                 .then((response) => {
-                    // console.log(response.data.data);
+                    // console.log(response.data);
                     setResult(() => {
                         return response.data.data.filter(
                             (music) => music.preview.length > 0
@@ -45,7 +45,11 @@ export default function SearchResult() {
         <div className="search-result">
             {result.map((item, index) => {
                 return (
-                    <div className="music-card" key={item.id} onClick={() => handlePlaylist(index)}>
+                    <div
+                        className="music-card"
+                        key={item.id}
+                        onClick={() => handlePlaylist(index)}
+                    >
                         <div className="image-container">
                             <img src={item.album.cover} alt="" />
                         </div>
