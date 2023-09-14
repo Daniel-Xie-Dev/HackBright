@@ -1,69 +1,70 @@
-.playlists {
-    padding: 20px 40px;
-}
-
-.playlists h2 {
+.dashboard h2 {
     text-align: left;
     color: white;
     font-size: 1.5rem;
     margin-bottom: 1.5em;
 }
 
-.playlists .list {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1em;
-    gap: 1.2em;
-    margin-top: 2.5em;
-    margin-bottom: 20px;
+.dashboard {
+    padding: 2em;
+    max-width: 100%;
     /* overflow: hidden; */
-    background-color: rgba(58, 71, 80, 0.4);
-    flex-wrap: wrap;
-    height: 100%;
 }
 
-.playlists .list .item {
-    min-width: 140px;
-    width: 160px;
-    padding: 1.3em;
+.dashboard .list {
+    background-color: rgba(58, 71, 80, 0.6);
+    display: flex;
+    border-radius: 1em;
+    gap: 0.5em;
+    padding: 1em;
+    margin-bottom: 0.5em;
+    overflow: auto;
+}
+
+.dashboard .list::-webkit-scrollbar {
+    border-radius: 10px;
+    background-color: #a4a8b4;
+    height: 8px;
+}
+
+.dashboard .list::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(75, 129, 171, 0.8);
+}
+
+.dashboard .list .item {
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+    width: 100px;
+    height: 150px;
+    padding: 1em;
+    margin-bottom: 10px;
     background-image: linear-gradient(
         to left,
         rgba(20, 30, 48, 0.6),
         rgba(36, 59, 85, 0.6)
     );
-    border-radius: 2em;
-    cursor: pointer;
+    border-radius: 1em;
     transition: 0.4s;
 }
 
-.playlists .list .item:hover {
-    background-color: rgba(75, 129, 171, 0.8);
+.dashboard .list .item:hover {
+    background-color: rgba(75, 129, 171, 0.9);
     transform: translateY(-1px);
     cursor: pointer;
 }
 
-.playlists .list .item img {
+.dashboard .list .item img {
     width: 100%;
     border-radius: 6px;
-    margin-bottom: 10px;
     opacity: 0.8;
 }
 
-.playlists .list .item .play {
-    position: relative;
-}
-
-.playlists .list .item h4 {
+.dashboard .list .item p {
     color: #fff;
     font-weight: 800;
-    font-size: 1rem;
-    text-align: center;
-}
-
-.playlists .list .item p {
-    color: #989898;
     font-size: 12px;
-    line-height: 20px;
-    font-weight: 600;
+    text-align: center;
+    white-space: normal;
 }

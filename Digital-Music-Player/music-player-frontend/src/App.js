@@ -16,6 +16,7 @@ import Library from "./components/Library/Library";
 
 function App() {
     const [cookies] = useCookies(["user"]);
+    console.log(cookies);
     const { setLibrary, likedMusiclist, setLikedMusiclist } = useAppContext();
 
     useEffect(() => {

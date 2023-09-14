@@ -105,7 +105,7 @@ function MusicPlayer() {
     // };
 
     const handleMusicLike = async (musicObject) => {
-        console.log(musicObject);
+        // console.log(musicObject);
         await axios
             .post(
                 `http://localhost:8080/api/v1/liked-music/addLikedMusic/${cookies.user.id}`,
@@ -135,8 +135,8 @@ function MusicPlayer() {
     const handleMusicUnlike = async () => {
         const id = playlist[playlistIndex].id;
 
-        console.log(id);
-        console.log(likedMusiclist);
+        // console.log(id);
+        // console.log(likedMusiclist);
 
         await axios
             .delete(
@@ -152,14 +152,13 @@ function MusicPlayer() {
                     // console.log(response.data);
                     setLikedMusiclist((prevMap) => {
                         prevMap.delete(id);
-                        return prevMap;
+                        return new Map(prevMap);
+                    });
+                    setLibrary((prevLibrary) => {
+                        return prevLibrary.filter((item) => item.id !== id);
                     });
                 }
             });
-
-        setLibrary((prevLibrary) => {
-            return prevLibrary.filter((item) => item.id !== id);
-        });
     };
 
     useEffect(() => {
@@ -171,13 +170,13 @@ function MusicPlayer() {
     return (
         <div className="music-player">
             <div className="song-bar">
-                <div className="song-infos">
+                <div className="song">
                     {playlist.length !== 0 ? (
                         <>
                             <div className="image-container">
                                 <img
                                     src={playlist[playlistIndex].album.cover}
-                                    alt=""
+                                    alt="alt"
                                 />
                             </div>
                             <div className="song-description">
@@ -209,7 +208,7 @@ function MusicPlayer() {
 
             <div className="progress-controller">
                 <div className="control-buttons">
-                    <i>
+                    <i className="like-button">
                         {!isPlaylistEmpty &&
                         likedMusiclist.has(playlist[playlistIndex].id) ? (
                             <AiFillHeart
@@ -258,22 +257,23 @@ function MusicPlayer() {
                     <i>
                         <MdReplayCircleFilled onClick={handleRepeat} />
                     </i>
-                    <div className="progress-container">
-                        <span>{currentTime}</span>
-                        {/* <div className="progress-bar">
+                </div>
+                <div className="progress-container">
+                    <span>{currentTime}</span>
+                    {/* <div className="progress-bar">
                             <div className="progress"></div>
                         </div> */}
-                        <input
-                            type="range"
-                            value={currentTime}
-                            max={duration}
-                            step={1}
-                            onMouseDown={handleMusicMouseDown}
-                            onChange={handleMusicTimestamp}
-                            onMouseUp={handleMusicMouseUp}
-                        ></input>
-                        <span>{duration}</span>
-                    </div>
+                    <input
+                        className="progress-bar"
+                        type="range"
+                        value={currentTime}
+                        max={duration}
+                        step={1}
+                        onMouseDown={handleMusicMouseDown}
+                        onChange={handleMusicTimestamp}
+                        onMouseUp={handleMusicMouseUp}
+                    ></input>
+                    <span>{duration}</span>
                 </div>
             </div>
         </div>

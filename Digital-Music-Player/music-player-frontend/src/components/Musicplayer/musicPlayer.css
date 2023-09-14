@@ -1,5 +1,3 @@
-/**Music player styling**/
-
 .music-player {
     background-color: rgba(58, 71, 80, 0.8);
     display: flex;
@@ -7,45 +5,49 @@
     align-items: center;
     position: fixed;
     bottom: 0;
+    padding: 10px;
     width: 100%;
-    height: 6em;
-    padding: 1em;
-    color: #ddd;
-    width: 100%;
+    height: 4rem;
 }
 
 .song-bar {
-    /* position: absolute; */
-    /* left: 3em; */
+    position: absolute;
+    left: 2.5em;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    /* width: 100%; */
+    width: 30%;
+    max-width: 30%;
 }
 
-.song-infos {
+.song {
     display: flex;
     align-items: center;
-    gap: 2rem;
-}
-
-.song-description p {
-    margin: 0.2rem;
-    font-size: 1.2em;
+    gap: 1em;
 }
 
 .image-container {
-    size: 6rem;
+    size: 5em;
     flex-shrink: 0;
-    width: 6rem;
-    height: 6rem;
+    width: 5em;
+    height: 5em;
 }
 
 .image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.song-description p {
+    font-size: 1rem;
+    text-align: left;
+    color: white;
+}
+
+.artist {
+    margin-bottom: 1em;
 }
 
 .song-title:hover,
@@ -60,25 +62,25 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    /* gap: 1.5rem; */
+    color: white;
+    padding: 5px;
 }
 
 .control-buttons {
     display: flex;
     align-items: center;
     gap: 2em;
-    color: white;
-    font-size: 1.5rem;
-    /* padding: 10px 0 0 0; */
+    font-size: 1.25em;
 }
 
 i:hover {
     color: #ffaa64;
     cursor: pointer;
+    transform: scale(1.1);
 }
 
 .play-pause {
-    font-size: 2.5rem;
+    font-size: 1.5em;
 }
 
 .play-pause:hover {
@@ -88,24 +90,26 @@ i:hover {
 }
 
 .progress-container {
-    width: 100%;
+    font-size: 0.85rem;
+    /* width: 100%; */
+    /* margin-bottom: 12px; */
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1em;
-    padding: 0 0 10px 0;
 }
 
 .progress-bar {
-    height: 10px;
-    border-radius: 10px;
-    width: 30%;
-    background-color: #ccc4;
+    width: 50%;
 }
 
-.progress {
-    background-color: rgba(75, 129, 171, 0.8);
-    border-radius: 10px;
-    height: 100%;
-    width: 30%;
+input[type="range"] {
+    width: 100%;
+    height: 5px;
+    border-radius: 40px;
+    background-color: (75, 129, 171, 0.4);
+}
+
+input[type="range"]:hover {
+    cursor: pointer;
 }

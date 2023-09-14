@@ -2,36 +2,72 @@ import React from "react";
 import "./dashboard.css";
 import { useNavigate } from "react-router-dom";
 
-var musicGenres = [
+var musicGenres = {
+    Pop: "https://upload.wikimedia.org/wikipedia/en/7/7a/Sweetener_album_cover.png",
+    // "Rock",
+    "Hip-Hop":
+        "https://upload.wikimedia.org/wikipedia/en/a/af/Drake_-_Views_cover.jpg",
+    Country:
+        "https://nashvillelifestyles.com/downloads/42380/download/Screen%20Shot%202022-06-28%20at%203.21.23%20PM.png?cb=be28ecb7e05df4c3a5c8f0aabe07430f",
+    "R&B (Rhythm and Blues)":
+        "https://i.scdn.co/image/ab67616d0000b2730a5b9c6778c775710b20cb44",
+    Latin: "https://www.billboard.com/wp-content/uploads/2022/05/bad-bunny-cover-art-2022-billboard-1240.jpg?w=1024",
+    // "Jazz",
+    // "Blues",
+    // "Gospel",
+    // "Classical",
+    // "Reggae",
+    // "Folk",
+    // "Punk",
+    // "Metal",
+    // "Soul",
+    // "Funk",
+    // "Alternative",
+    // "Indie",
+    // "Rap",
+    // "Techno",
+    // "Dance",
+    // "House",
+    // "EDM (Electronic Dance Music)",
+    // "Bluegrass",
+    // "Disco",
+    // "Ska",
+    // "Latin",
+    // "K-Pop",
+    // "Opera",
+};
+
+var genres = [
     "Pop",
-    "Rock",
     "Hip-Hop",
     "Country",
     "R&B (Rhythm and Blues)",
-    "Electronic",
-    "Jazz",
-    "Blues",
-    "Gospel",
-    "Classical",
-    "Reggae",
-    "Folk",
-    "Punk",
-    "Metal",
-    "Soul",
-    "Funk",
-    "Alternative",
-    "Indie",
-    "Rap",
-    "Techno",
-    "Dance",
-    "House",
-    "EDM (Electronic Dance Music)",
-    "Bluegrass",
-    "Disco",
-    "Ska",
     "Latin",
-    "K-Pop",
-    "Opera",
+    "Pop",
+    "Hip-Hop",
+    "Country",
+    "R&B (Rhythm and Blues)",
+    "Latin",
+    "Pop",
+    "Hip-Hop",
+    "Country",
+    "R&B (Rhythm and Blues)",
+    "Latin",
+    "Pop",
+    "Hip-Hop",
+    "Country",
+    "R&B (Rhythm and Blues)",
+    "Latin",
+    "Pop",
+    "Hip-Hop",
+    "Country",
+    "R&B (Rhythm and Blues)",
+    "Latin",
+    "Pop",
+    "Hip-Hop",
+    "Country",
+    "R&B (Rhythm and Blues)",
+    "Latin",
 ];
 
 export default function Dashboard() {
@@ -50,24 +86,21 @@ export default function Dashboard() {
             </div>
             {true ? (
                 <>
-                    <div className="playlists">
+                    <div className="dashboard">
+                        <div className="dashboard-title">
+                            <h2>Explore</h2>
+                        </div>
                         <div className="list">
-                            <div className="category">
-                                <h2>Explore</h2>
-                            </div>
-                            {musicGenres.map((genre) => {
+                            {genres.map((genre) => {
+                                // console.log(musicGenres[genre]);
                                 return (
                                     <div
                                         className="item"
                                         key={genre}
                                         onClick={() => handleGenreClick(genre)}
                                     >
-                                        <img
-                                            src="https://upload.wikimedia.org/wikipedia/en/7/7a/Sweetener_album_cover.png"
-                                            alt="album"
-                                        />
-
-                                        <h4>{genre}</h4>
+                                        <img src={musicGenres[genre]} alt="album" />
+                                        <p>{genre}</p>
                                     </div>
                                 );
                             })}
@@ -76,8 +109,20 @@ export default function Dashboard() {
                                     src="https://upload.wikimedia.org/wikipedia/en/7/7a/Sweetener_album_cover.png"
                                     alt="album"
                                 />
+                                <p>Pop</p>
+                            </div> */}
+                        </div>
 
-                                <h4>Pop</h4>
+                        <div className="dashboard-title">
+                            <h2>Reccomendation</h2>
+                        </div>
+                        <div className="list">
+                            <div className="item">
+                                <img
+                                    src="https://upload.wikimedia.org/wikipedia/en/7/7a/Sweetener_album_cover.png"
+                                    alt="album"
+                                />
+                                <p>Pop</p>
                             </div>
                             <div className="item">
                                 <img
@@ -85,7 +130,7 @@ export default function Dashboard() {
                                     alt="album"
                                 />
 
-                                <h4>Hip-Hop/Rap</h4>
+                                <p>FirstName LastName</p>
                             </div>
                             <div className="item">
                                 <img
@@ -93,7 +138,7 @@ export default function Dashboard() {
                                     alt="album"
                                 />
 
-                                <h4>Latin</h4>
+                                <p>Latin</p>
                             </div>
                             <div className="item">
                                 <img
@@ -101,7 +146,7 @@ export default function Dashboard() {
                                     alt="album"
                                 />
 
-                                <h4>Country</h4>
+                                <p>Country</p>
                             </div>
                             <div className="item">
                                 <img
@@ -109,56 +154,32 @@ export default function Dashboard() {
                                     alt="album"
                                 />
 
-                                <h4>R&B</h4>
-                            </div> */}
+                                <p>R&B</p>
+                            </div>
+                            <div className="item">
+                                <img
+                                    src="https://i.scdn.co/image/ab67616d0000b2730a5b9c6778c775710b20cb44"
+                                    alt="album"
+                                />
+                                <p>R&B</p>
+                            </div>
+                            <div className="item">
+                                <img
+                                    src="https://i.scdn.co/image/ab67616d0000b2730a5b9c6778c775710b20cb44"
+                                    alt="album"
+                                />
+
+                                <p>R&B</p>
+                            </div>
+                            <div className="item">
+                                <img
+                                    src="https://i.scdn.co/image/ab67616d0000b2730a5b9c6778c775710b20cb44"
+                                    alt="album"
+                                />
+
+                                <p>R&B</p>
+                            </div>
                         </div>
-                        {/* <div className="list">
-                            <h2>Trending</h2>
-                            <div className="item">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/en/b/b5/ImagineDragonsEvolve.jpg"
-                                    alt="album"
-                                />
-
-                                <h4>Today's Top Hits</h4>
-                                <p>Arist names</p>
-                            </div>
-                            <div className="item">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/en/b/b5/ImagineDragonsEvolve.jpg"
-                                    alt="album"
-                                />
-
-                                <h4>Today's Top Hits</h4>
-                                <p>Arist names</p>
-                            </div>
-                            <div className="item">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/en/b/b5/ImagineDragonsEvolve.jpg"
-                                    alt="album"
-                                />
-
-                                <h4>Today's Top Hits</h4>
-                                <p>Arist names</p>
-                            </div>
-                            <div className="item">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/en/b/b5/ImagineDragonsEvolve.jpg"
-                                    alt="album"
-                                />
-
-                                <h4>Today's Top Hits</h4>
-                                <p>Arist names</p>
-                            </div>
-                            <div className="item">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/en/b/b5/ImagineDragonsEvolve.jpg"
-                                    alt="album"
-                                />
-                                <h4>Today's Top Hits</h4>
-                                <p>Arist names</p>
-                            </div>
-                        </div> */}
                     </div>
                 </>
             ) : (
