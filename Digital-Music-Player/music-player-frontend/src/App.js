@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useAppContext } from "./GlobalContext";
 import Library from "./components/Library/Library";
+import Playlist from "./components/Playlist/Playlist";
 
 function App() {
     const [cookies] = useCookies(["user"]);
@@ -88,6 +89,7 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/library" element={<Library />} />
+                        <Route path="/playlist" element={<Playlist />} />
                         <Route
                             path="/search/result/:query"
                             element={<SearchResult />}

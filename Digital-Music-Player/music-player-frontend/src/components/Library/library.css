@@ -1,5 +1,5 @@
-/*Song Playlist styles*/
-.playlist {
+/*Song library styles*/
+.library {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@
     color: white;
 }
 
-.playlist-main-table {
+.library-main-table {
     background-color: rgba(58, 71, 80, 0.6);
     max-height: 70vh;
 
@@ -18,7 +18,7 @@
     margin-top: 1em;
 }
 
-.playlist table {
+.library table {
     height: 100%;
     width: 100%;
 

@@ -50,11 +50,11 @@ export default function Library() {
 
     return (
         <>
-            <div className="playlist">
+            <div className="library">
                 <div className="explore-header-card">
-                    <h1 className="main-title">Playlist</h1>
+                    <h1 className="main-title">Library</h1>
                 </div>
-                <div className="playlist-main-table">
+                <div className="library-main-table">
                     <table>
                         <thead>
                             <tr>
@@ -70,7 +70,7 @@ export default function Library() {
                                 library.map((item, index) => {
                                     // console.log(item);
                                     return (
-                                        <tr className="playlist-row" key={item.id}>
+                                        <tr className="library-row" key={item.id}>
                                             <td className="library-td">
                                                 {item.title}
                                             </td>

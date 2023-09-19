@@ -50,8 +50,8 @@ export default function Sidebar() {
                 /> */}
                 {cookies.user ? (
                     <SideBarButton
-                        title="Library"
-                        to="/library"
+                        title="Playlist"
+                        to="/playlist"
                         icon={<BiSolidPlaylist />}
                     />
                 ) : (
