@@ -10,7 +10,7 @@ import com.server.digital_music_player.Dtos.TrackListDto;
 import com.server.digital_music_player.Services.TrackListService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/api/v1/tracklists")
 public class TrackListController {
 

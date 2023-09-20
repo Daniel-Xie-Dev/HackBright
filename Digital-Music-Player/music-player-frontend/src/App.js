@@ -32,18 +32,18 @@ function App() {
                         for (let object of response.data) {
                             tempMap.set(object.api, object.id);
                         }
-                        // console.log(response);
+                        changeLikedMusicToObect(tempMap);
                         return tempMap;
                     });
-                    changeLikedMusicToObect();
                 })
+
                 .catch((err) => console.log(err));
         };
 
-        const changeLikedMusicToObect = async () => {
+        const changeLikedMusicToObect = async (tempMap) => {
             let promises = [];
             let data = [];
-            for (let object of likedMusiclist) {
+            for (let object of tempMap) {
                 promises.push(
                     axios
                         .get(
@@ -64,8 +64,10 @@ function App() {
             }
             Promise.all(promises).then(() => {
                 setLibrary(() => {
-                    // console.log(data);
-                    return [...data];
+                    let tempMap = new Map();
+                    console.log(data);
+                    tempMap.set("favorite", [...data]);
+                    return tempMap;
                 });
             });
         };
@@ -86,10 +88,11 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Homepage />} />
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/playlist" element={<Playlist />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
-                        <Route path="/library" element={<Library />} />
-                        <Route path="/playlist" element={<Playlist />} />
+                        <Route path="/library/:query" element={<Library />} />
+
                         <Route
                             path="/search/result/:query"
                             element={<SearchResult />}

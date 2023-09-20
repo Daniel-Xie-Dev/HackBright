@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private TrackListRepository trackListRepository;
+//    @Autowired
+//    private TrackListRepository trackListRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
             User user = new User(userDto);
             userRepository.saveAndFlush(user);
 
-            TrackList trackList = new TrackList();
-            trackList.setTrackTitle("main");
-            trackList.setUser(user);
-            trackListRepository.saveAndFlush(trackList);
+//            TrackList trackList = new TrackList();
+//            trackList.setTrackTitle("main");
+//            trackList.setUser(user);
+//            trackListRepository.saveAndFlush(trackList);
             return Optional.of(new UserDto(user));
         }
         return Optional.empty();

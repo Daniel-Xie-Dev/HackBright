@@ -105,6 +105,9 @@ function MusicPlayer() {
     // };
 
     const handleMusicLike = async (musicObject) => {
+        if (isPlaylistEmpty) return;
+        if (likedMusiclist.has(musicObject.id)) return;
+        console.log(likedMusiclist.has(musicObject.id));
         // console.log(musicObject);
         await axios
             .post(
@@ -118,12 +121,18 @@ function MusicPlayer() {
             )
             .then((response) => {
                 if (response.data) {
+                    setLibrary((prevLibrary) => {
+                        let tempMap = prevLibrary.get("favorite");
+                        if (tempMap[tempMap.length - 1].id !== musicObject.id) {
+                            prevLibrary.set("favorite", [...tempMap, musicObject]);
+                        }
+                        console.log(prevLibrary.get("favorite"));
+
+                        return new Map(prevLibrary);
+                    });
                     setLikedMusiclist((prevMap) => {
                         prevMap.set(musicObject.id, response.data.id);
                         return new Map(prevMap);
-                    });
-                    setLibrary((prev) => {
-                        return [...prev, musicObject];
                     });
                 }
             })
@@ -133,6 +142,7 @@ function MusicPlayer() {
     };
 
     const handleMusicUnlike = async () => {
+        if (isPlaylistEmpty) return;
         const id = playlist[playlistIndex].id;
 
         // console.log(id);
@@ -155,7 +165,12 @@ function MusicPlayer() {
                         return new Map(prevMap);
                     });
                     setLibrary((prevLibrary) => {
-                        return prevLibrary.filter((item) => item.id !== id);
+                        let temp = prevLibrary
+                            .get("favorite")
+                            .filter((item) => item.id !== id);
+                        prevLibrary.set("favorite", temp);
+
+                        return new Map(prevLibrary);
                     });
                 }
             });
@@ -211,20 +226,11 @@ function MusicPlayer() {
                     <i className="like-button">
                         {!isPlaylistEmpty &&
                         likedMusiclist.has(playlist[playlistIndex].id) ? (
-                            <AiFillHeart
-                                onClick={
-                                    isPlaylistEmpty ? undefined : handleMusicUnlike
-                                }
-                            />
+                            <AiFillHeart onClick={handleMusicUnlike} />
                         ) : (
                             <AiOutlineHeart
-                                onClick={
-                                    isPlaylistEmpty
-                                        ? undefined
-                                        : () =>
-                                              handleMusicLike(
-                                                  playlist[playlistIndex]
-                                              )
+                                onClick={() =>
+                                    handleMusicLike(playlist[playlistIndex])
                                 }
                             />
                         )}

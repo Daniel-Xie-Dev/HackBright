@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./library.css";
 
 import { BsFillPlayFill, BsHeartFill } from "react-icons/bs";
 import { useAppContext } from "../../GlobalContext";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function Library() {
+    const { query } = useParams();
     const {
         setPlaylist,
         library,
@@ -14,8 +16,6 @@ export default function Library() {
         setLikedMusiclist,
         setLibrary,
     } = useAppContext();
-
-    // console.log(library);
 
     const handleMusicUnlike = async (id) => {
         await axios
@@ -35,18 +35,25 @@ export default function Library() {
                         return new Map(prevMap);
                     });
                     setLibrary((prevLibrary) => {
-                        return prevLibrary.filter((item) => item.id !== id);
+                        let temp = prevLibrary
+                            .get("favorite")
+                            .filter((item) => item.id !== id);
+                        prevLibrary.set("favorite", temp);
+
+                        return new Map(prevLibrary);
                     });
                 }
             });
     };
 
     const handleLibraryEvent = (index) => {
-        setPlaylist(library);
+        setPlaylist(library.get(query));
         setPlaylistIndex(index);
     };
 
-    // console.log(library);
+    // useEffect(() => {
+    //     const getLibraryByPlay
+    // })
 
     return (
         <>
@@ -67,39 +74,46 @@ export default function Library() {
                         </thead>
                         <tbody>
                             {
-                                library.map((item, index) => {
-                                    // console.log(item);
-                                    return (
-                                        <tr className="library-row" key={item.id}>
-                                            <td className="library-td">
-                                                {item.title}
-                                            </td>
-                                            <td className="library-td">
-                                                {item.artist.name}
-                                            </td>
-                                            <td className="library-td">
-                                                {item.album.title}
-                                            </td>
-                                            <td
-                                                className="song-play library-icon"
-                                                onClick={() =>
-                                                    handleLibraryEvent(index)
-                                                }
+                                library instanceof Map &&
+                                library.get(query) !== undefined ? (
+                                    library.get(query).map((item, index) => {
+                                        // console.log(item);
+                                        return (
+                                            <tr
+                                                className="library-row"
+                                                key={item.id}
                                             >
-                                                <BsFillPlayFill />
-                                            </td>
-                                            <td
-                                                className="heart library-icon"
-                                                onClick={() =>
-                                                    handleMusicUnlike(item.id)
-                                                }
-                                            >
-                                                <BsHeartFill />
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-
+                                                <td className="library-td">
+                                                    {item.title}
+                                                </td>
+                                                <td className="library-td">
+                                                    {item.artist.name}
+                                                </td>
+                                                <td className="library-td">
+                                                    {item.album.title}
+                                                </td>
+                                                <td
+                                                    className="song-play library-icon"
+                                                    onClick={() =>
+                                                        handleLibraryEvent(index)
+                                                    }
+                                                >
+                                                    <BsFillPlayFill />
+                                                </td>
+                                                <td
+                                                    className="heart library-icon"
+                                                    onClick={() =>
+                                                        handleMusicUnlike(item.id)
+                                                    }
+                                                >
+                                                    <BsHeartFill />
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                ) : (
+                                    <></>
+                                )
                                 /* <tr>
                                 <td>Fire</td>
                                 <td>Imagine Dragons</td>
