@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./library.css";
-
+import { AiFillDelete, AiFillEdit, AiFillSave } from "react-icons/ai";
 import { BsFillPlayFill, BsHeartFill } from "react-icons/bs";
 import { useAppContext } from "../../GlobalContext";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Library() {
     const { query } = useParams();
@@ -16,6 +16,13 @@ export default function Library() {
         setLikedMusiclist,
         setLibrary,
     } = useAppContext();
+
+    const [isEditable, setIsEditable] = useState(false);
+    const trackTitleRef = useRef();
+    const navigate = useNavigate();
+
+    const isFavorite = query === "favorite";
+    const handleIsEditable = () => setIsEditable(!isEditable);
 
     const handleMusicUnlike = async (id) => {
         await axios
@@ -51,15 +58,79 @@ export default function Library() {
         setPlaylistIndex(index);
     };
 
-    // useEffect(() => {
-    //     const getLibraryByPlay
-    // })
+    const handleTitleChange = async () => {
+        await axios
+            .put(
+                `http://localhost:8080/api/v1/tracklists/edit`,
+                {
+                    id: query,
+                    trackTitle: trackTitleRef.current.value,
+                },
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            )
+            .then((response) => {
+                trackTitleRef.current.value = "";
+                setIsEditable(false);
+            })
+            .catch((err) => console.log(err));
+    };
+
+    const handleDelete = async () => {
+        await axios
+            .delete(`http://localhost:8080/api/v1/tracklists/${query}`, {
+                headers: { "Content-Type": "application/json" },
+            })
+            .then((response) => {
+                navigate("/playlist");
+            })
+            .catch((err) => console.log(err));
+    };
+
+    useEffect(() => {
+        const getLibraryById = async () => {
+            axios.get();
+        };
+
+        if (query !== "favorite") {
+            // getLibraryById();
+        }
+    }, []);
+
+    console.log(isEditable);
 
     return (
         <>
             <div className="library">
                 <div className="explore-header-card">
-                    <h1 className="main-title">Library</h1>
+                    <input
+                        placeholder="Insert library Title Here"
+                        className={
+                            isEditable ? "library-title" : "library-title-disabled"
+                        }
+                        disabled={!isEditable}
+                        ref={trackTitleRef}
+                    ></input>
+
+                    {!isFavorite ? (
+                        <>
+                            {isEditable ? (
+                                <div onClick={handleTitleChange}>
+                                    <AiFillSave fontSize={"2rem"} />
+                                </div>
+                            ) : (
+                                <div onClick={handleIsEditable}>
+                                    <AiFillEdit fontSize={"2rem"} />
+                                </div>
+                            )}
+                            <div onClick={handleDelete}>
+                                <AiFillDelete fontSize={"2rem"} />
+                            </div>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </div>
                 <div className="library-main-table">
                     <table>

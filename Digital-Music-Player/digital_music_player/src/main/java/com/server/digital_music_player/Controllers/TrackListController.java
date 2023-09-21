@@ -36,7 +36,6 @@ public class TrackListController {
     @PutMapping(path = "/edit")
     public void editTrackTitle(@RequestBody TrackListDto trackListDto) {
         trackListService.editTrackTitle(trackListDto);
-        return;
     }
 
 }

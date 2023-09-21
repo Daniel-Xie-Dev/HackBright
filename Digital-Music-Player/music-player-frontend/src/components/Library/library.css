@@ -7,6 +7,35 @@
     color: white;
 }
 
+.explore-header-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.library-title-disabled {
+    outline: none;
+    background: transparent;
+    border: 1px solid transparent;
+    height: 2rem;
+    font-size: larger;
+}
+
+.library-title {
+    /* outline: none; */
+    background: transparent;
+    height: 2rem;
+    font-size: larger;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid white;
+}
+
+.library-title:focus {
+    outline: none;
+}
+
 .library-main-table {
     background-color: rgba(58, 71, 80, 0.6);
     max-height: 70vh;

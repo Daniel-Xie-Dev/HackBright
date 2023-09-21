@@ -11,9 +11,9 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    justify-content: space-evenly;
+    /* padding-left: 3rem;
+    padding-right: 3rem; */
     /* justify-content: center; */
 }
 
@@ -28,7 +28,7 @@
     border-radius: 10px;
     font-size: larger;
     /* margin: 1rem; */
-    margin-top: 1rem;
+    margin: 2rem;
     background: linear-gradient(-225deg, #473b7b 0%, #3584a7 51%, #30d2be 100%);
     transition: all 0.3s ease-in-out;
 }

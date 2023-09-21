@@ -103,7 +103,7 @@ function MusicPlayer() {
     //     }
     //     return false;
     // };
-
+    console.log(currentTime);
     const handleMusicLike = async (musicObject) => {
         if (isPlaylistEmpty) return;
         if (likedMusiclist.has(musicObject.id)) return;

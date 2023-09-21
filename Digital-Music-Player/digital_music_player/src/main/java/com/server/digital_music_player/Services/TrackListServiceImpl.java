@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.sound.midi.Track;
+import javax.swing.text.html.Option;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,15 @@ public class TrackListServiceImpl implements TrackListService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    public Optional<TrackListDto> getTrackListById(Long tracklistId){
+        Optional<TrackList> trackListOptional = trackListRepository.findById(tracklistId);
+        if(trackListOptional.isPresent()){
+            return Optional.of(new TrackListDto(trackListOptional.get()));
+        }
+        return Optional.empty();
+    }
 
     @Override
     public List<TrackListDto> getAllTrackListByUser(Long userId) {
