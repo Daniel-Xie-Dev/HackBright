@@ -123,7 +123,10 @@ function MusicPlayer() {
                 if (response.data) {
                     setLibrary((prevLibrary) => {
                         let tempMap = prevLibrary.get("favorite");
-                        if (tempMap[tempMap.length - 1].id !== musicObject.id) {
+                        if (
+                            tempMap.length !== 0 &&
+                            tempMap[tempMap.length - 1].id !== musicObject.id
+                        ) {
                             prevLibrary.set("favorite", [...tempMap, musicObject]);
                         }
                         console.log(prevLibrary.get("favorite"));

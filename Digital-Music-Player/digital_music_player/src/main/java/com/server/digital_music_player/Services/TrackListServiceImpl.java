@@ -47,17 +47,17 @@ public class TrackListServiceImpl implements TrackListService {
 
     @Override
     @Transactional
-    public List<String> addTrackListToUser(Long userId, String trackListTitle) {
+    public Optional<TrackListDto> addTrackListToUser(Long userId, String trackListTitle) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             TrackList trackList = new TrackList();
             trackList.setTrackTitle(trackListTitle);
             trackList.setUser(userOptional.get());
-            Long id = trackListRepository.saveAndFlush(trackList).getId();
+            TrackList trackList1 = trackListRepository.saveAndFlush(trackList);
 
-            return new ArrayList<String>(Arrays.asList(String.valueOf(id), trackListTitle));
+            return Optional.of(new TrackListDto(trackList1));
         }
-        return Collections.emptyList();
+        return Optional.empty();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.server.digital_music_player.Controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class TrackListController {
     }
 
     @PostMapping(path = "/user/{userId}")
-    public List<String> addTrackListToUser(@PathVariable Long userId, @RequestParam String trackListTitle) {
+    public Optional<TrackListDto> addTrackListToUser(@PathVariable Long userId, @RequestParam String trackListTitle) {
         return trackListService.addTrackListToUser(userId, trackListTitle);
     }
 
