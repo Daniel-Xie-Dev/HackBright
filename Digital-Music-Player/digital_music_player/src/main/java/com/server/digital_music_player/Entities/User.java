@@ -42,20 +42,23 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "favorite_list")
+    private Long favorite_list;
+
     // @Column(name = "created_at")
     // @CreationTimestamp
     // private Timestamp created_at;
 
+//
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<History> histories = new HashSet<>();
+
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private Set<LikedMusic> likedMusics = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<History> histories = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<LikedMusic> likedMusics = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-tracklist")
     private Set<TrackList> trackLists = new HashSet<>();
 
     public User(UserDto userDto) {
@@ -70,6 +73,7 @@ public class User {
         if (userDto.getPassword() != null) {
             this.password = userDto.getPassword();
         }
+
 
         // if (userDto.getCreated_at() != null) {
         // this.created_at = userDto.getCreated_at();

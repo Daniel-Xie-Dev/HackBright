@@ -17,62 +17,61 @@ import Playlist from "./components/Playlist/Playlist";
 
 function App() {
     const [cookies] = useCookies(["user"]);
-    console.log(cookies);
-    const { setLibrary, likedMusiclist, setLikedMusiclist } = useAppContext();
+    // console.log(cookies);
+    const { library, setLibrary, likedMusiclist, setLikedMusiclist } =
+        useAppContext();
 
     useEffect(() => {
-        const getAllLikedMusicByUser = async () => {
+        const getTracklistByUser = async () => {
             await axios
                 .get(
-                    `http://localhost:8080/api/v1/liked-music/getAllLikedMusic/${cookies.user.id}`
+                    `http://localhost:8080/api/v1/tracklists/user/${cookies.user.id}`
                 )
-                .then((response) => {
-                    setLikedMusiclist(() => {
-                        let tempMap = new Map();
-                        for (let object of response.data) {
-                            tempMap.set(object.api, object.id);
-                        }
-                        changeLikedMusicToObect(tempMap);
-                        return tempMap;
-                    });
+                .then(async (response) => {
+                    let tempMap = new Map();
+                    for (let object of response.data) {
+                        tempMap.set(object.id, object);
+                        await getMusicTracksByTracklist(tempMap, object.id);
+                    }
+                    setLibrary(tempMap);
                 })
-
                 .catch((err) => console.log(err));
         };
 
-        const changeLikedMusicToObect = async (tempMap) => {
-            let promises = [];
-            let data = [];
-            for (let object of tempMap) {
-                promises.push(
-                    axios
-                        .get(
-                            `https://deezerdevs-deezer.p.rapidapi.com/track/${object[0]}`,
-                            {
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
-                                    "X-RapidAPI-Host": process.env.REACT_APP_HOST,
-                                },
-                            }
-                        )
-                        .then((response) => {
-                            data.push(response.data);
-                        })
-                        .catch((error) => console.log(error))
-                );
-            }
-            Promise.all(promises).then(() => {
-                setLibrary(() => {
-                    let tempMap = new Map();
-                    console.log(data);
-                    tempMap.set("favorite", [...data]);
-                    return tempMap;
-                });
-            });
+        const getMusicTracksByTracklist = async (tempMap, id) => {
+            await axios
+                .get(`http://localhost:8080/api/v1/musicTracks/${id}`)
+                .then((response) => {
+                    if (response.data) {
+                        // console.log(response)
+                        let object = tempMap.get(id);
+                        const musics = response.data;
+                        object = { ...object, musics };
+                        tempMap.set(id, object);
+                    }
+                })
+                .catch((err) => console.log(err));
+        };
+
+        const getAllLikedMusicByUser = async () => {
+            await axios
+                .get(
+                    `http://localhost:8080/api/v1/musicTracks/${cookies.user.favorite_list}`
+                )
+                .then((response) => {
+                    if (response.data) {
+                        setLikedMusiclist(() => {
+                            return new Set(
+                                response.data.map((item) => item.music.apiId)
+                            );
+                        });
+                    }
+                })
+                .catch((err) => console.log(err));
         };
 
         if (cookies.user) {
+            getTracklistByUser();
             getAllLikedMusicByUser();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

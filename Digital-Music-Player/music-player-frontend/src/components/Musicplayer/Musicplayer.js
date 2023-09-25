@@ -27,12 +27,14 @@ function MusicPlayer() {
         playlist,
         playlistIndex,
         setPlaylistIndex,
+        library,
         setLibrary,
         likedMusiclist,
         setLikedMusiclist,
     } = useAppContext();
 
     const isPlaylistEmpty = playlist.length === 0;
+    // console.log(library);
 
     // console.log(likedMusiclist)
     // const handleVolumeChange = (e) => {
@@ -91,99 +93,79 @@ function MusicPlayer() {
         });
     };
 
-    // const isLiked = () => {
-    //     if (isPlaylistEmpty) {
-    //         return false;
-    //     }
-
-    //     for (let likedMusicObject of likedMusiclist) {
-    //         if (likedMusicObject.api === playlist[playlistIndex].id) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // };
-    console.log(currentTime);
-    const handleMusicLike = async (musicObject) => {
-        if (isPlaylistEmpty) return;
-        if (likedMusiclist.has(musicObject.id)) return;
-        console.log(likedMusiclist.has(musicObject.id));
-        // console.log(musicObject);
-        await axios
-            .post(
-                `http://localhost:8080/api/v1/liked-music/addLikedMusic/${cookies.user.id}`,
-                {
-                    api: `${playlist[playlistIndex].id}`,
-                },
-                {
-                    headers: { "Content-Type": "application/json" },
-                }
-            )
-            .then((response) => {
-                if (response.data) {
-                    setLibrary((prevLibrary) => {
-                        let tempMap = prevLibrary.get("favorite");
-                        if (
-                            tempMap.length !== 0 &&
-                            tempMap[tempMap.length - 1].id !== musicObject.id
-                        ) {
-                            prevLibrary.set("favorite", [...tempMap, musicObject]);
-                        }
-                        console.log(prevLibrary.get("favorite"));
-
-                        return new Map(prevLibrary);
-                    });
-                    setLikedMusiclist((prevMap) => {
-                        prevMap.set(musicObject.id, response.data.id);
-                        return new Map(prevMap);
-                    });
-                }
-            })
-            .catch((error) => console.log(error));
-
-        // console.log("ASDFADSADFSSf")
-    };
-
-    const handleMusicUnlike = async () => {
-        if (isPlaylistEmpty) return;
-        const id = playlist[playlistIndex].id;
-
-        // console.log(id);
-        // console.log(likedMusiclist);
-
-        await axios
-            .delete(
-                `http://localhost:8080/api/v1/liked-music/deleteLikedMusic/${likedMusiclist.get(
-                    id
-                )}`,
-                {
-                    headers: { "Content-Type": "application/json" },
-                }
-            )
-            .then((response) => {
-                if (response.data) {
-                    // console.log(response.data);
-                    setLikedMusiclist((prevMap) => {
-                        prevMap.delete(id);
-                        return new Map(prevMap);
-                    });
-                    setLibrary((prevLibrary) => {
-                        let temp = prevLibrary
-                            .get("favorite")
-                            .filter((item) => item.id !== id);
-                        prevLibrary.set("favorite", temp);
-
-                        return new Map(prevLibrary);
-                    });
-                }
-            });
-    };
-
     useEffect(() => {
         if (playlist.length !== 0) {
             audioRef.current.src = playlist[playlistIndex].preview;
         }
     }, [playlist, playlistIndex]);
+
+    const addMusicToTracklist = async (trackId) => {
+        const musicTracks = playlist[playlistIndex];
+
+        await axios
+            .post(`http://localhost:8080/api/v1/musicTracks/add/${trackId}`, {
+                apiId: musicTracks.id,
+                title: musicTracks.title,
+                artist: musicTracks.artist.name,
+                album: musicTracks.album.title,
+            })
+            .then((response) => {
+                if (response.data !== null) {
+                    setLibrary((prevLibrary) => {
+                        let object = prevLibrary.get(trackId);
+                        const musics = [...object.musics, response.data];
+                        object = { ...object, musics };
+                        console.log(object);
+                        prevLibrary.set(trackId, object);
+                        console.log(library);
+                        return new Map(prevLibrary);
+                    });
+
+                    setLikedMusiclist((prevSet) => {
+                        return new Set(prevSet.add(musicTracks.id));
+                    });
+                }
+            })
+            .catch((err) => console.log(err));
+    };
+
+    const removeMusicTrackFromList = async () => {
+        const musicTracks = playlist[playlistIndex];
+        // console.log(library.get(cookies.user.favorite_list));
+        const musicArray = library.get(cookies.user.favorite_list).musics;
+        // const musicArray = 0;
+        console.log(musicArray.length);
+
+        for (let i = 0; i < musicArray.length; i++) {
+            if (musicArray[i].music.apiId === musicTracks.id) {
+                console.log(musicArray[i].apiId === musicTracks.id);
+                await axios
+                    .delete(
+                        `http://localhost:8080/api/v1/musicTracks/delete/${musicArray[i].id}`
+                    )
+                    .then((response) => {
+                        setLibrary((prevLibrary) => {
+                            const musics = musicArray.filter(
+                                (item) => item.music.apiId !== musicTracks.id
+                            );
+
+                            console.log(musics);
+                            let object = prevLibrary.get(cookies.user.favorite_list);
+                            object = { ...object, musics };
+                            prevLibrary.set(cookies.user.favorite_list, object);
+                            return new Map(prevLibrary);
+                        });
+
+                        setLikedMusiclist((prevSet) => {
+                            prevSet.delete(musicTracks.id);
+                            return new Set(prevSet);
+                        });
+                    })
+                    .catch((error) => console.log(error));
+                break;
+            }
+        }
+    };
 
     return (
         <div className="music-player">
@@ -229,11 +211,11 @@ function MusicPlayer() {
                     <i className="like-button">
                         {!isPlaylistEmpty &&
                         likedMusiclist.has(playlist[playlistIndex].id) ? (
-                            <AiFillHeart onClick={handleMusicUnlike} />
+                            <AiFillHeart onClick={removeMusicTrackFromList} />
                         ) : (
                             <AiOutlineHeart
                                 onClick={() =>
-                                    handleMusicLike(playlist[playlistIndex])
+                                    addMusicToTracklist(cookies.user.favorite_list)
                                 }
                             />
                         )}

@@ -26,12 +26,12 @@ public class MusicTracks {
     private Long id;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "tracklist-musictracks")
     @JoinColumn(name = "tracklist_id")
     private TrackList trackList;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "music-musictracks")
     @JoinColumn(name = "music_id")
     private Music music;
 

@@ -18,13 +18,16 @@ public class MusicDto implements Serializable {
 
     private Long id;
     private Long apiId;
-    private Long apiSource;
+    private String title;
+    private String artist;
+    private String album;
+
     // private Timestamp createdAt;
 
     // private HistoryDto historyDto;
 
     private Set<MusicTracksDto> musicTracks = new HashSet<>();
-    private Set<HistoryDto> historyDtos = new HashSet<>();
+//    private Set<HistoryDto> historyDtos = new HashSet<>();
 
     public MusicDto(Music music) {
         if (music.getId() != null) {
@@ -35,9 +38,18 @@ public class MusicDto implements Serializable {
             this.apiId = music.getApiId();
         }
 
-        if (music.getApiSource() != null) {
-            this.apiSource = music.getApiSource();
+        if(music.getArtist() != null){
+            this.artist = music.getArtist();
         }
+
+        if(music.getTitle() != null){
+            this.title = music.getTitle();
+        }
+
+        if(music.getAlbum() != null){
+            this.album = music.getAlbum();
+        }
+
 
         // if (music.getCreatedAt() != null) {
         // this.createdAt = music.getCreatedAt();

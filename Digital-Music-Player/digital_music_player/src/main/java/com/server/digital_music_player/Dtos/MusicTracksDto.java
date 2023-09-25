@@ -1,5 +1,6 @@
 package com.server.digital_music_player.Dtos;
 
+import com.server.digital_music_player.Entities.Music;
 import com.server.digital_music_player.Entities.MusicTracks;
 
 import lombok.AllArgsConstructor;
@@ -13,11 +14,15 @@ public class MusicTracksDto {
 
     private Long id;
     private TrackListDto trackListDto;
-    private MusicDto musicDto;
+    private Music music;
 
     public MusicTracksDto(MusicTracks musicTracks) {
         if (musicTracks.getId() != null) {
             this.id = musicTracks.getId();
+        }
+
+        if(musicTracks.getMusic() != null){
+            this.music = musicTracks.getMusic();
         }
     }
 }

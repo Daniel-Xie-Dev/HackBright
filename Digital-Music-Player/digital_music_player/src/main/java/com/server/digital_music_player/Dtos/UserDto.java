@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.server.digital_music_player.Entities.TrackList;
 import com.server.digital_music_player.Entities.User;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class UserDto implements Serializable {
     private String email;
     private String username;
     private String password;
+    private Long favorite_list;
     // private Timestamp created_at;
     private Set<TrackListDto> trackLists = new HashSet<>();
 
@@ -35,6 +37,16 @@ public class UserDto implements Serializable {
         if (user.getUsername() != null){
             this.username = user.getUsername();
         }
+
+        if(user.getFavorite_list() != null){
+            this.favorite_list = user.getFavorite_list();
+        }
+
+//        if(user.getTrackLists() != null){
+//            for(TrackList trackList : user.getTrackLists()){
+//                this.trackLists.add(new TrackListDto(trackList));
+//            }
+//        }
 //
 //        if (user.getPassword() != null) {
 //            this.password = user.getPassword();

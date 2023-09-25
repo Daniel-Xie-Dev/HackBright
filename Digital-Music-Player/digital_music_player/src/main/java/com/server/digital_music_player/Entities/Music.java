@@ -37,29 +37,47 @@ public class Music {
     @Column(name = "api_id")
     private Long apiId;
 
-    @Column(name = "source")
-    private Long apiSource;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "artist")
+    private String artist;
+
+    @Column(name = "album")
+    private String album;
 
     // @Column(name = "created_at")
     // @CreationTimestamp
     // private Timestamp createdAt;
 
     @OneToMany(mappedBy = "music", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "music-musictracks")
     private Set<MusicTracks> musicTracks = new HashSet<>();
 
-    @OneToMany(mappedBy = "music", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<History> histories = new HashSet<>();
+//    @OneToMany(mappedBy = "music", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private Set<History> histories = new HashSet<>();
 
     public Music(MusicDto musicDto) {
         if (musicDto.getApiId() != null) {
             this.apiId = musicDto.getApiId();
         }
 
-        if (musicDto.getApiSource() != null) {
-            this.apiSource = musicDto.getApiSource();
+        if(musicDto.getArtist() != null){
+            this.artist = musicDto.getArtist();
         }
+
+        if(musicDto.getTitle() != null){
+            this.title = musicDto.getTitle();
+        }
+
+        if(musicDto.getAlbum() != null){
+            this.album = musicDto.getAlbum();
+        }
+
+
+
+
     }
 
 }

@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
+import { useAppContext } from "../../GlobalContext";
 
 export default function Playlist() {
     const [cookies, setCookies] = useCookies();
@@ -12,10 +13,13 @@ export default function Playlist() {
     const titleRef = useRef();
     const [open, setOpen] = useState(false);
 
+    const { library, setLibrary } = useAppContext();
+
     const handleClose = () => setOpen(false);
     const handleOpen = () => setOpen(true);
     const navigate = useNavigate();
 
+    console.log(library);
     const handleCreatePlaylist = async () => {
         await axios
             .post(
@@ -29,8 +33,9 @@ export default function Playlist() {
             )
             .then((response) => {
                 if (response.data) {
-                    setPlaylists((prev) => {
-                        return [...prev, response.data];
+                    setLibrary((prev) => {
+                        prev.set(response.data.id, response.data);
+                        return new Map(prev);
                     });
                 }
             })
@@ -39,25 +44,6 @@ export default function Playlist() {
             });
         handleClose();
     };
-
-    useEffect(() => {
-        const getAllPlaylistsByUser = async () => {
-            await axios
-                .get(
-                    `http://localhost:8080/api/v1/tracklists/user/${cookies.user.id}`
-                )
-                .then((response) => {
-                    console.log(response.data);
-                    setPlaylists(response.data);
-                })
-                .catch((err) => console.log(err));
-        };
-        if (cookies.user) {
-            getAllPlaylistsByUser();
-        } else {
-            navigate("/");
-        }
-    }, []);
 
     return (
         <>
@@ -90,24 +76,16 @@ export default function Playlist() {
                     >
                         <AiOutlinePlus />
                     </div>
-                    <div
-                        className="playlist-card"
-                        onClick={() => navigate(`/library/${"favorite"}`)}
-                    >
-                        Favorites
-                    </div>
 
-                    {playlists.map((playlist) => {
+                    {[...library.keys()].map((key) => {
                         return (
                             <>
                                 <div
-                                    key={playlist.id}
+                                    key={key}
                                     className="playlist-card"
-                                    onClick={() =>
-                                        navigate(`/library/${playlist.id}`)
-                                    }
+                                    onClick={() => navigate(`/library/${key}`)}
                                 >
-                                    {playlist.trackTitle}
+                                    {library.get(key).trackTitle}
                                 </div>
                             </>
                         );

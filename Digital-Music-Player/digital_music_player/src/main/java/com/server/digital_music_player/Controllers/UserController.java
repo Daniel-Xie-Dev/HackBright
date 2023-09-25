@@ -21,7 +21,6 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private UserService userService;
 
@@ -30,6 +29,7 @@ public class UserController {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         userDto.setPassword(encodedPassword);
         return userService.addUser(userDto);
+//        return Optional.empty();
         // return "success";
     }
 

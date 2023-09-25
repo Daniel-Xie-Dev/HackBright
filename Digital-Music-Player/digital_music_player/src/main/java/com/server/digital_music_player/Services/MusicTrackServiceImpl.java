@@ -1,9 +1,6 @@
 package com.server.digital_music_player.Services;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +47,7 @@ public class MusicTrackServiceImpl implements MusicTrackService {
 
     @Override
     @Transactional
-    public void addMusicTrackToTrackList(MusicDto musicDto, Long trackListId) {
+    public Optional<MusicTracksDto> addMusicTrackToTrackList(MusicDto musicDto, Long trackListId) {
         Optional<Music> musicOptional = musicRepository.findByApiId(musicDto.getApiId());
         if (musicOptional.isEmpty()) {
             musicService.storeMusic(musicDto);
@@ -59,11 +56,23 @@ public class MusicTrackServiceImpl implements MusicTrackService {
         musicOptional = musicRepository.findByApiId(musicDto.getApiId());
         Optional<TrackList> trackList = trackListRepository.findById(trackListId);
 
-        MusicTracks musicTracks = new MusicTracks();
-        musicTracks.setMusic(musicOptional.get());
-        musicTracks.setTrackList(trackList.get());
+        if(trackList.isPresent()){
+            List<MusicTracksDto> musicTracksDtos = getAllMusicTracksInTrackList(trackList.get().getId());
+            for(MusicTracksDto musicTracksDto : musicTracksDtos){
+                if(Objects.equals(musicTracksDto.getMusic().getApiId(), musicDto.getApiId())){
+                    return Optional.empty();
+                }
+            }
+        }
 
-        musicTrackRepository.saveAndFlush(musicTracks);
+        if(trackList.isPresent()){
+            MusicTracks musicTracks = new MusicTracks();
+            musicTracks.setMusic(musicOptional.get());
+            musicTracks.setTrackList(trackList.get());
+            musicTrackRepository.saveAndFlush(musicTracks);
+            return Optional.of(new MusicTracksDto(musicTracks));
+        }
+        return Optional.empty();
     }
 
     @Override

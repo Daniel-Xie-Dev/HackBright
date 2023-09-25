@@ -45,11 +45,11 @@ public class TrackList {
     // private Timestamp createdAt;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "user-tracklist")
     private User user;
 
     @OneToMany(mappedBy = "trackList", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "tracklist-musictracks")
     private Set<MusicTracks> musicTracks = new HashSet<>();
 
     public TrackList(TrackListDto trackListDto) {
