@@ -5,9 +5,11 @@ import { BsFillPlayFill, BsHeartFill } from "react-icons/bs";
 import { useAppContext } from "../../GlobalContext";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Library() {
     const { query } = useParams();
+    const [cookies] = useCookies();
     const {
         setPlaylist,
         library,
@@ -21,8 +23,8 @@ export default function Library() {
     const trackTitleRef = useRef();
     const navigate = useNavigate();
 
-    const isFavorite = query === "favorite";
     const handleIsEditable = () => setIsEditable(!isEditable);
+    const isLibraryLoaded = library.get(parseInt(query)) !== undefined;
 
     const handleMusicUnlike = async (id) => {
         await axios
@@ -54,7 +56,7 @@ export default function Library() {
     };
 
     const handleLibraryEvent = (index) => {
-        setPlaylist(library.get(query));
+        setPlaylist(library.get(parseInt(query)));
         setPlaylistIndex(index);
     };
 
@@ -98,8 +100,6 @@ export default function Library() {
         }
     }, []);
 
-    console.log(isEditable);
-
     return (
         <>
             <div className="library">
@@ -107,29 +107,28 @@ export default function Library() {
                     <input
                         placeholder="Insert library Title Here"
                         className={
-                            isEditable ? "library-title" : "library-title-disabled"
+                            query === cookies.user.favorite_list
+                                ? "library-title"
+                                : "library-title-disabled"
                         }
                         disabled={!isEditable}
                         ref={trackTitleRef}
                     ></input>
 
-                    {!isFavorite ? (
+                    {parseInt(query) === cookies.user.favorite_list ? (
+                        <></>
+                    ) : (
                         <>
-                            {isEditable ? (
-                                <div onClick={handleTitleChange}>
-                                    <AiFillSave fontSize={"2rem"} />
-                                </div>
-                            ) : (
-                                <div onClick={handleIsEditable}>
-                                    <AiFillEdit fontSize={"2rem"} />
-                                </div>
-                            )}
+                            <div onClick={handleTitleChange}>
+                                <AiFillSave fontSize={"2rem"} />
+                            </div>
+                            <div onClick={handleIsEditable}>
+                                <AiFillEdit fontSize={"2rem"} />
+                            </div>
                             <div onClick={handleDelete}>
                                 <AiFillDelete fontSize={"2rem"} />
                             </div>
                         </>
-                    ) : (
-                        <></>
                     )}
                 </div>
                 <div className="library-main-table">
@@ -145,43 +144,46 @@ export default function Library() {
                         </thead>
                         <tbody>
                             {
-                                library instanceof Map &&
-                                library.get(query) !== undefined ? (
-                                    library.get(query).map((item, index) => {
-                                        // console.log(item);
-                                        return (
-                                            <tr
-                                                className="library-row"
-                                                key={item.id}
-                                            >
-                                                <td className="library-td">
-                                                    {item.title}
-                                                </td>
-                                                <td className="library-td">
-                                                    {item.artist.name}
-                                                </td>
-                                                <td className="library-td">
-                                                    {item.album.title}
-                                                </td>
-                                                <td
-                                                    className="song-play library-icon"
-                                                    onClick={() =>
-                                                        handleLibraryEvent(index)
-                                                    }
+                                isLibraryLoaded ? (
+                                    library
+                                        .get(parseInt(query))
+                                        .musics.map((item, index) => {
+                                            // console.log(item);
+                                            return (
+                                                <tr
+                                                    className="library-row"
+                                                    key={item.id}
                                                 >
-                                                    <BsFillPlayFill />
-                                                </td>
-                                                <td
-                                                    className="heart library-icon"
-                                                    onClick={() =>
-                                                        handleMusicUnlike(item.id)
-                                                    }
-                                                >
-                                                    <BsHeartFill />
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+                                                    <td className="library-td">
+                                                        {item.music.title}
+                                                    </td>
+                                                    <td className="library-td">
+                                                        {item.music.artist}
+                                                    </td>
+                                                    <td className="library-td">
+                                                        {item.music.album}
+                                                    </td>
+                                                    <td
+                                                        className="song-play library-icon"
+                                                        onClick={() =>
+                                                            handleLibraryEvent(index)
+                                                        }
+                                                    >
+                                                        <BsFillPlayFill />
+                                                    </td>
+                                                    <td
+                                                        className="heart library-icon"
+                                                        onClick={() =>
+                                                            handleMusicUnlike(
+                                                                item.id
+                                                            )
+                                                        }
+                                                    >
+                                                        <BsHeartFill />
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
                                 ) : (
                                     <></>
                                 )

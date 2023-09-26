@@ -21,6 +21,7 @@ function MusicPlayer() {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isRepeating, setIsRepeating] = useState(false);
+    const [isMusicSearch, setIsMusicSearch] = useState(0);
     const [cookies] = useCookies();
 
     const {
@@ -29,11 +30,12 @@ function MusicPlayer() {
         setPlaylistIndex,
         library,
         setLibrary,
+        setPlaylist,
         likedMusiclist,
         setLikedMusiclist,
     } = useAppContext();
 
-    const isPlaylistEmpty = playlist.length === 0;
+    // const isPlaylistEmpty = playlist.length === 0;
     // console.log(library);
 
     // console.log(likedMusiclist)
@@ -83,19 +85,68 @@ function MusicPlayer() {
     };
 
     const handleNextPrevious = (index) => {
+        let size = 0;
+        if (isMusicSearch === 1) size = playlist.length;
+        else if (isMusicSearch === 2) size = playlist.musics?.length;
+
+        console.log(size);
         setPlaylistIndex((initialValue) => {
             const playlistIndex =
-                initialValue + index < 0
-                    ? playlist.length - 1
-                    : (initialValue + index) % playlist.length;
-            audioRef.current.src = playlist[playlistIndex].preview;
+                initialValue + index < 0 ? size - 1 : (initialValue + index) % size;
+            console.log(initialValue);
             return playlistIndex;
         });
     };
 
     useEffect(() => {
+        const getMusicFromRapid = async () => {
+            console.log(playlistIndex);
+            console.log(playlist.musics);
+            await axios
+                .get(
+                    `https://deezerdevs-deezer.p.rapidapi.com/track/${playlist.musics[playlistIndex].music.apiId}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+                            "X-RapidAPI-Host": process.env.REACT_APP_HOST,
+                        },
+                    }
+                )
+                .then((response) => {
+                    const tempObject = { ...playlist };
+                    tempObject.musics[playlistIndex] = {
+                        ...tempObject.musics[playlistIndex],
+                        rapid: response.data,
+                    };
+
+                    audioRef.current.src = response.data.preview;
+                    setLibrary((prevLibrary) => {
+                        prevLibrary.set(playlist.id, tempObject);
+                        return new Map(prevLibrary);
+                    });
+
+                    setPlaylist(() => {
+                        return library.get(playlist.id);
+                    });
+                })
+                .catch((error) => console.log(error));
+        };
+
         if (playlist.length !== 0) {
-            audioRef.current.src = playlist[playlistIndex].preview;
+            // console.log(playlist);
+            if (playlist.musics === undefined) {
+                setIsMusicSearch(1);
+                console.log("From Search");
+                audioRef.current.src = playlist[playlistIndex].preview;
+            } else if (playlist.musics[playlistIndex]?.rapid === undefined) {
+                setIsMusicSearch(2);
+                console.log("From library");
+                getMusicFromRapid();
+            } else {
+                setIsMusicSearch(2);
+                audioRef.current.src = playlist.musics[playlistIndex]?.rapid.preview;
+            }
         }
     }, [playlist, playlistIndex]);
 
@@ -138,7 +189,6 @@ function MusicPlayer() {
 
         for (let i = 0; i < musicArray.length; i++) {
             if (musicArray[i].music.apiId === musicTracks.id) {
-                console.log(musicArray[i].apiId === musicTracks.id);
                 await axios
                     .delete(
                         `http://localhost:8080/api/v1/musicTracks/delete/${musicArray[i].id}`
@@ -175,42 +225,65 @@ function MusicPlayer() {
                         <>
                             <div className="image-container">
                                 <img
-                                    src={playlist[playlistIndex].album.cover}
+                                    src={
+                                        isMusicSearch > 0
+                                            ? isMusicSearch === 1
+                                                ? playlist?.[playlistIndex]?.album
+                                                      ?.cover
+                                                : playlist?.musics?.[playlistIndex]
+                                                      ?.rapid?.album?.cover
+                                            : ""
+                                    }
                                     alt="alt"
                                 />
                             </div>
                             <div className="song-description">
                                 <p className="song-title">
-                                    {playlist[playlistIndex].title}
+                                    {isMusicSearch > 0
+                                        ? isMusicSearch === 1
+                                            ? playlist?.[playlistIndex]?.title
+                                            : playlist?.musics?.[playlistIndex]
+                                                  ?.rapid?.title
+                                        : ""}
                                 </p>
                                 <p className="artist">
-                                    {playlist[playlistIndex].artist.name}
+                                    {isMusicSearch > 0
+                                        ? isMusicSearch === 1
+                                            ? playlist?.[playlistIndex]?.artist?.name
+                                            : playlist?.musics?.[playlistIndex]
+                                                  ?.rapid?.artist?.name
+                                        : ""}
                                 </p>
                             </div>
-                            <audio
-                                autoPlay={isPlaying}
-                                className="MusicPlayerAudio"
-                                ref={audioRef}
-                                loop={isRepeating}
-                                onTimeUpdate={handleMusicPlaying}
-                                onLoadedMetadata={handleLoadedMetaData}
-                                onEnded={() => handleNextPrevious(1)}
-                            >
-                                <source type="audio/mp3" />
-                                Your browser does not support audio element.
-                            </audio>
                         </>
                     ) : (
                         <></>
                     )}
+                    <audio
+                        autoPlay={isPlaying}
+                        className="MusicPlayerAudio"
+                        ref={audioRef}
+                        loop={isRepeating}
+                        onTimeUpdate={handleMusicPlaying}
+                        onLoadedMetadata={handleLoadedMetaData}
+                        onEnded={() => handleNextPrevious(1)}
+                    >
+                        <source type="audio/mp3" />
+                        Your browser does not support audio element.
+                    </audio>
                 </div>
             </div>
 
             <div className="progress-controller">
                 <div className="control-buttons">
                     <i className="like-button">
-                        {!isPlaylistEmpty &&
-                        likedMusiclist.has(playlist[playlistIndex].id) ? (
+                        {likedMusiclist.has(
+                            isMusicSearch > 0
+                                ? isMusicSearch === 1
+                                    ? playlist?.[playlistIndex]?.id
+                                    : playlist?.musics?.[playlistIndex]?.rapid?.id
+                                : ""
+                        ) ? (
                             <AiFillHeart onClick={removeMusicTrackFromList} />
                         ) : (
                             <AiOutlineHeart
@@ -221,13 +294,7 @@ function MusicPlayer() {
                         )}
                     </i>
                     <i>
-                        <AiFillStepBackward
-                            onClick={
-                                isPlaylistEmpty
-                                    ? undefined
-                                    : () => handleNextPrevious(-1)
-                            }
-                        />
+                        <AiFillStepBackward onClick={() => handleNextPrevious(-1)} />
                     </i>
                     <i className="play-pause">
                         {isPlaying ? (
@@ -237,13 +304,7 @@ function MusicPlayer() {
                         )}
                     </i>
                     <i>
-                        <AiFillStepForward
-                            onClick={
-                                isPlaylistEmpty
-                                    ? undefined
-                                    : () => handleNextPrevious(1)
-                            }
-                        />
+                        <AiFillStepForward onClick={() => handleNextPrevious(1)} />
                     </i>
                     <i>
                         <MdReplayCircleFilled onClick={handleRepeat} />
