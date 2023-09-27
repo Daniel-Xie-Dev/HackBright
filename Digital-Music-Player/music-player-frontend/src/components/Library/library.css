@@ -19,6 +19,7 @@
     border: 1px solid transparent;
     height: 2rem;
     font-size: larger;
+    color: lightcyan;
 }
 
 .library-title {
@@ -30,6 +31,7 @@
     border-left: 1px solid transparent;
     border-right: 1px solid transparent;
     border-bottom: 1px solid white;
+    /* color: white; */
 }
 
 .library-title:focus {

@@ -14,20 +14,26 @@ import { MdReplayCircleFilled } from "react-icons/md";
 import axios from "axios";
 import { useAppContext } from "../../GlobalContext";
 import { useCookies } from "react-cookie";
+import {
+    addMusicTrackToTracklist,
+    removeMusicTrackFromList,
+} from "../../api/MusictrackAPI";
 
 function MusicPlayer() {
     const audioRef = useRef();
+    const [currentMusic, setCurrentMusic] = useState({});
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isRepeating, setIsRepeating] = useState(false);
-    const [isMusicSearch, setIsMusicSearch] = useState(0);
     const [cookies] = useCookies();
 
     const {
         playlist,
         playlistIndex,
         setPlaylistIndex,
+        isMusicSearch,
+        setIsMusicSearch,
         library,
         setLibrary,
         setPlaylist,
@@ -44,6 +50,9 @@ function MusicPlayer() {
     // };
 
     const handlePlayPause = () => {
+        if (audioRef.current.src === undefined) {
+            return;
+        }
         if (audioRef.current) {
             setIsPlaying((value) => {
                 value ? audioRef.current.pause() : audioRef.current.play();
@@ -89,7 +98,6 @@ function MusicPlayer() {
         if (isMusicSearch === 1) size = playlist.length;
         else if (isMusicSearch === 2) size = playlist.musics?.length;
 
-        console.log(size);
         setPlaylistIndex((initialValue) => {
             const playlistIndex =
                 initialValue + index < 0 ? size - 1 : (initialValue + index) % size;
@@ -100,8 +108,6 @@ function MusicPlayer() {
 
     useEffect(() => {
         const getMusicFromRapid = async () => {
-            console.log(playlistIndex);
-            console.log(playlist.musics);
             await axios
                 .get(
                     `https://deezerdevs-deezer.p.rapidapi.com/track/${playlist.musics[playlistIndex].music.apiId}`,
@@ -114,20 +120,11 @@ function MusicPlayer() {
                     }
                 )
                 .then((response) => {
-                    const tempObject = { ...playlist };
-                    tempObject.musics[playlistIndex] = {
-                        ...tempObject.musics[playlistIndex],
-                        rapid: response.data,
-                    };
-
                     audioRef.current.src = response.data.preview;
-                    setLibrary((prevLibrary) => {
-                        prevLibrary.set(playlist.id, tempObject);
-                        return new Map(prevLibrary);
-                    });
 
-                    setPlaylist(() => {
-                        return library.get(playlist.id);
+                    setPlaylist((prevPlaylist) => {
+                        prevPlaylist.musics[playlistIndex]["rapid"] = response.data;
+                        return { ...prevPlaylist };
                     });
                 })
                 .catch((error) => console.log(error));
@@ -139,80 +136,81 @@ function MusicPlayer() {
                 setIsMusicSearch(1);
                 console.log("From Search");
                 audioRef.current.src = playlist[playlistIndex].preview;
+                setCurrentMusic(playlist[playlistIndex]);
             } else if (playlist.musics[playlistIndex]?.rapid === undefined) {
                 setIsMusicSearch(2);
+                setCurrentMusic(playlist.musics[playlistIndex]);
                 console.log("From library");
                 getMusicFromRapid();
             } else {
                 setIsMusicSearch(2);
+                setCurrentMusic(playlist.musics[playlistIndex]);
                 audioRef.current.src = playlist.musics[playlistIndex]?.rapid.preview;
             }
         }
     }, [playlist, playlistIndex]);
 
-    const addMusicToTracklist = async (trackId) => {
-        const musicTracks = playlist[playlistIndex];
+    const addMusic = async (trackId) => {
+        console.log(currentMusic);
+        if (isMusicSearch === 0) return;
+        const response = await addMusicTrackToTracklist(
+            trackId,
+            isMusicSearch,
+            currentMusic
+        );
+        console.log(response);
 
-        await axios
-            .post(`http://localhost:8080/api/v1/musicTracks/add/${trackId}`, {
-                apiId: musicTracks.id,
-                title: musicTracks.title,
-                artist: musicTracks.artist.name,
-                album: musicTracks.album.title,
-            })
-            .then((response) => {
-                if (response.data !== null) {
-                    setLibrary((prevLibrary) => {
-                        let object = prevLibrary.get(trackId);
-                        const musics = [...object.musics, response.data];
-                        object = { ...object, musics };
-                        console.log(object);
-                        prevLibrary.set(trackId, object);
-                        console.log(library);
-                        return new Map(prevLibrary);
-                    });
-
-                    setLikedMusiclist((prevSet) => {
-                        return new Set(prevSet.add(musicTracks.id));
-                    });
-                }
-            })
-            .catch((err) => console.log(err));
+        if (response !== null) {
+            setLibrary((prevLibrary) => {
+                let object = prevLibrary.get(trackId);
+                if (
+                    object.musics.length !== 0 &&
+                    object.musics[object.musics.length - 1].id === response.id
+                )
+                    return prevLibrary;
+                const musics = [...object.musics, response];
+                object.musics = musics;
+                prevLibrary.set(trackId, object);
+                console.log(prevLibrary.get(trackId).musics);
+                return new Map(prevLibrary);
+            });
+            setLikedMusiclist((prevSet) => {
+                return new Set(prevSet.add(response.music.apiId));
+            });
+        }
     };
 
-    const removeMusicTrackFromList = async () => {
-        const musicTracks = playlist[playlistIndex];
-        // console.log(library.get(cookies.user.favorite_list));
-        const musicArray = library.get(cookies.user.favorite_list).musics;
-        // const musicArray = 0;
-        console.log(musicArray.length);
+    const removeMusic = async (trackId) => {
+        console.log(currentMusic);
 
-        for (let i = 0; i < musicArray.length; i++) {
-            if (musicArray[i].music.apiId === musicTracks.id) {
-                await axios
-                    .delete(
-                        `http://localhost:8080/api/v1/musicTracks/delete/${musicArray[i].id}`
-                    )
-                    .then((response) => {
-                        setLibrary((prevLibrary) => {
-                            const musics = musicArray.filter(
-                                (item) => item.music.apiId !== musicTracks.id
-                            );
+        const response = await removeMusicTrackFromList(
+            isMusicSearch,
+            library.get(trackId)?.musics,
+            currentMusic
+        );
 
-                            console.log(musics);
-                            let object = prevLibrary.get(cookies.user.favorite_list);
-                            object = { ...object, musics };
-                            prevLibrary.set(cookies.user.favorite_list, object);
-                            return new Map(prevLibrary);
-                        });
+        // console.log(response);
+        if (response !== undefined) {
+            const object = library
+                .get(trackId)
+                ?.musics.find((item) => item.music.apiId === response);
+            if (object !== undefined) {
+                setLibrary((prevLibrary) => {
+                    const musics = library
+                        .get(trackId)
+                        ?.musics.filter((item) => item.music.apiId !== response);
+                    console.log(musics);
+                    let object = prevLibrary.get(trackId);
+                    object = { ...object, musics };
+                    prevLibrary.set(trackId, object);
 
-                        setLikedMusiclist((prevSet) => {
-                            prevSet.delete(musicTracks.id);
-                            return new Set(prevSet);
-                        });
-                    })
-                    .catch((error) => console.log(error));
-                break;
+                    console.log(prevLibrary.get(trackId).musics);
+                    return new Map(prevLibrary);
+                });
+                setLikedMusiclist((prevSet) => {
+                    prevSet.delete(object.music.apiId);
+                    return new Set(prevSet);
+                });
             }
         }
     };
@@ -281,15 +279,18 @@ function MusicPlayer() {
                             isMusicSearch > 0
                                 ? isMusicSearch === 1
                                     ? playlist?.[playlistIndex]?.id
-                                    : playlist?.musics?.[playlistIndex]?.rapid?.id
+                                    : playlist?.musics?.[playlistIndex]?.rapid?.id ||
+                                      playlist?.musics?.[playlistIndex]?.music.apiId
                                 : ""
                         ) ? (
-                            <AiFillHeart onClick={removeMusicTrackFromList} />
+                            <AiFillHeart
+                                onClick={() =>
+                                    removeMusic(cookies.user.favorite_list)
+                                }
+                            />
                         ) : (
                             <AiOutlineHeart
-                                onClick={() =>
-                                    addMusicToTracklist(cookies.user.favorite_list)
-                                }
+                                onClick={() => addMusic(cookies.user.favorite_list)}
                             />
                         )}
                     </i>

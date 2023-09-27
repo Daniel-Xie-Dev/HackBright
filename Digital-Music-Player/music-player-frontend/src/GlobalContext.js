@@ -8,6 +8,7 @@ export function useAppContext() {
 
 export function AppProvider({ children }) {
     const [playlist, setPlaylist] = useState([]);
+    const [isMusicSearch, setIsMusicSearch] = useState(0);
     const [library, setLibrary] = useState(new Map());
     const [playlistIndex, setPlaylistIndex] = useState(0);
     const [likedMusiclist, setLikedMusiclist] = useState(new Set());
@@ -16,6 +17,8 @@ export function AppProvider({ children }) {
         playlist,
         setPlaylist,
         library,
+        isMusicSearch,
+        setIsMusicSearch,
         setLibrary,
         playlistIndex,
         setPlaylistIndex,
