@@ -8,6 +8,7 @@ import {
     AiFillPauseCircle,
     AiOutlineHeart,
     AiFillHeart,
+    AiOutlinePlus,
 } from "react-icons/ai";
 
 import { MdReplayCircleFilled } from "react-icons/md";
@@ -36,6 +37,8 @@ function MusicPlayer() {
         setIsMusicSearch,
         library,
         setLibrary,
+        setShowModal,
+        setData,
         setPlaylist,
         likedMusiclist,
         setLikedMusiclist,
@@ -104,6 +107,28 @@ function MusicPlayer() {
             console.log(initialValue);
             return playlistIndex;
         });
+    };
+
+    const handleMusicModal = async () => {
+        const apiId =
+            playlist?.musics?.[playlistIndex]?.music?.apiId ||
+            playlist?.[playlistIndex].id;
+
+        await axios
+            .get(`https://deezerdevs-deezer.p.rapidapi.com/track/${apiId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+                    "X-RapidAPI-Host": process.env.REACT_APP_HOST,
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setData(response.data);
+                    setShowModal(true);
+                }
+            })
+            .catch((error) => console.log(error));
     };
 
     useEffect(() => {
@@ -310,23 +335,33 @@ function MusicPlayer() {
                     <i>
                         <MdReplayCircleFilled onClick={handleRepeat} />
                     </i>
-                </div>
-                <div className="progress-container">
-                    <span>{currentTime}</span>
-                    {/* <div className="progress-bar">
+
+                    <i>
+                        <AiOutlinePlus
+                            onClick={
+                                audioRef?.current?.src === ""
+                                    ? undefined
+                                    : handleMusicModal
+                            }
+                        />
+                    </i>
+                    <div className="progress-container">
+                        <span>{currentTime}</span>
+                        {/* <div className="progress-bar">
                             <div className="progress"></div>
                         </div> */}
-                    <input
-                        className="progress-bar"
-                        type="range"
-                        value={currentTime}
-                        max={duration}
-                        step={1}
-                        onMouseDown={handleMusicMouseDown}
-                        onChange={handleMusicTimestamp}
-                        onMouseUp={handleMusicMouseUp}
-                    ></input>
-                    <span>{duration}</span>
+                        <input
+                            className="progress-bar"
+                            type="range"
+                            value={currentTime}
+                            max={duration}
+                            step={1}
+                            onMouseDown={handleMusicMouseDown}
+                            onChange={handleMusicTimestamp}
+                            onMouseUp={handleMusicMouseUp}
+                        ></input>
+                        <span>{duration}</span>
+                    </div>
                 </div>
             </div>
         </div>

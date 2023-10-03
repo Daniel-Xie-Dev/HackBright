@@ -69,6 +69,7 @@ export async function removeMusicTrackFromList(isMusicSearch, musics, currentMus
 
 export async function removeMusicLibrary(apiId, musics) {
     try {
+        console.log(musics);
         const id = musics.find((item) => item.music.apiId === apiId).id;
 
         // const response = "success";

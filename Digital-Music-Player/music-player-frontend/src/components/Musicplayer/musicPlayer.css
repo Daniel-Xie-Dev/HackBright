@@ -73,6 +73,11 @@
     font-size: 1.25em;
 }
 
+i {
+    display: flex;
+    align-items: center;
+}
+
 i:hover {
     color: #ffaa64;
     cursor: pointer;
@@ -93,6 +98,7 @@ i:hover {
     font-size: 0.85rem;
     /* width: 100%; */
     /* margin-bottom: 12px; */
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

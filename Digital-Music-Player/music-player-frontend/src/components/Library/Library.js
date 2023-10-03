@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./library.css";
-import { AiFillDelete, AiFillEdit, AiFillSave } from "react-icons/ai";
+import {
+    AiFillDelete,
+    AiFillEdit,
+    AiFillSave,
+    AiOutlineMinus,
+} from "react-icons/ai";
 import { BsFillPlayFill, BsHeartFill } from "react-icons/bs";
 import { useAppContext } from "../../GlobalContext";
 import axios from "axios";
-import { removeMusicTrackFromList } from "../../api/MusictrackAPI";
+import { removeMusicLibrary } from "../../api/MusictrackAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -28,31 +33,35 @@ export default function Library() {
     const isLibraryLoaded = library.get(parseInt(query)) !== undefined;
 
     const removeMusic = async (apiId) => {
-        // const response = await removeMusicTrackFromList(
-        //     apiId, library.get(parseInt(query)?.musics)
-        // );
-        // console.log(response);
-        // if (response !== undefined) {
-        //     const object = library
-        //         .get(parseInt(query))
-        //         ?.musics.find((item) => item.music.apiId === response);
-        //     if (object !== undefined) {
-        //         setLibrary((prevLibrary) => {
-        //             const musics = library
-        //                 .get(parseInt(query))
-        //                 ?.musics.filter((item) => item.music.apiId !== response);
-        //             console.log(musics);
-        //             let object = prevLibrary.get(parseInt(query));
-        //             object = { ...object, musics };
-        //             prevLibrary.set(parseInt(query), object);
-        //             return new Map(prevLibrary);
-        //         });
-        //         setLikedMusiclist((prevSet) => {
-        //             prevSet.delete(object.music.apiId);
-        //             return new Set(prevSet);
-        //         });
-        //     }
-        // }
+        const response = await removeMusicLibrary(
+            apiId,
+            library.get(parseInt(query))?.musics
+        );
+        console.log(response);
+        if (response !== undefined) {
+            const object = library
+                .get(parseInt(query))
+                ?.musics.find((item) => item.music.apiId === response);
+            if (object !== undefined) {
+                setLibrary((prevLibrary) => {
+                    const musics = library
+                        .get(parseInt(query))
+                        ?.musics.filter((item) => item.music.apiId !== response);
+                    console.log(musics);
+                    let object = prevLibrary.get(parseInt(query));
+                    object = { ...object, musics };
+                    prevLibrary.set(parseInt(query), object);
+                    return new Map(prevLibrary);
+                });
+
+                if (cookies.user.favorite_list === parseInt(query)) {
+                    setLikedMusiclist((prevSet) => {
+                        prevSet.delete(object.music.apiId);
+                        return new Set(prevSet);
+                    });
+                }
+            }
+        }
     };
 
     const handleLibraryEvent = (index) => {
@@ -149,6 +158,7 @@ export default function Library() {
                                 <th>Album</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -191,6 +201,19 @@ export default function Library() {
                                                         }
                                                     >
                                                         <BsHeartFill />
+                                                    </td>
+
+                                                    <td
+                                                        className="song-play library-icon"
+                                                        onClick={() =>
+                                                            removeMusic(
+                                                                parseInt(
+                                                                    item.music.apiId
+                                                                )
+                                                            )
+                                                        }
+                                                    >
+                                                        <AiOutlineMinus />
                                                     </td>
                                                 </tr>
                                             );
