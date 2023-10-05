@@ -3,13 +3,15 @@ import "./library.css";
 import {
     AiFillDelete,
     AiFillEdit,
+    AiFillHeart,
     AiFillSave,
+    AiOutlineHeart,
     AiOutlineMinus,
 } from "react-icons/ai";
 import { BsFillPlayFill, BsHeartFill } from "react-icons/bs";
 import { useAppContext } from "../../GlobalContext";
 import axios from "axios";
-import { removeMusicLibrary } from "../../api/MusictrackAPI";
+import { addMusicToTracklist, removeMusicLibrary } from "../../api/MusictrackAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -32,29 +34,60 @@ export default function Library() {
     const handleIsEditable = () => setIsEditable(!isEditable);
     const isLibraryLoaded = library.get(parseInt(query)) !== undefined;
 
-    const removeMusic = async (apiId) => {
+    const likeMusicFromLibrary = async (music) => {
+        const musicTrack = {
+            apiId: music.apiId,
+            title: music.title,
+            artist: music.artist,
+            album: music.album,
+        };
+
+        const response = await addMusicToTracklist(
+            musicTrack,
+            cookies.user.favorite_list
+        );
+        if (response !== null) {
+            setLibrary((prevLibrary) => {
+                let object = prevLibrary.get(cookies.user.favorite_list);
+                if (
+                    object.musics.length !== 0 &&
+                    object.musics[object.musics.length - 1].id === response.id
+                )
+                    return prevLibrary;
+                const musics = [...object.musics, response];
+                object.musics = musics;
+                prevLibrary.set(cookies.user.favorite_list, object);
+                return new Map(prevLibrary);
+            });
+            setLikedMusiclist((prevSet) => {
+                return new Set(prevSet.add(response.music.apiId));
+            });
+        }
+    };
+
+    const removeMusic = async (apiId, key) => {
         const response = await removeMusicLibrary(
             apiId,
-            library.get(parseInt(query))?.musics
+            library.get(parseInt(key))?.musics
         );
         console.log(response);
         if (response !== undefined) {
             const object = library
-                .get(parseInt(query))
+                .get(parseInt(key))
                 ?.musics.find((item) => item.music.apiId === response);
             if (object !== undefined) {
                 setLibrary((prevLibrary) => {
                     const musics = library
-                        .get(parseInt(query))
+                        .get(parseInt(key))
                         ?.musics.filter((item) => item.music.apiId !== response);
                     console.log(musics);
-                    let object = prevLibrary.get(parseInt(query));
+                    let object = prevLibrary.get(parseInt(key));
                     object = { ...object, musics };
-                    prevLibrary.set(parseInt(query), object);
+                    prevLibrary.set(parseInt(key), object);
                     return new Map(prevLibrary);
                 });
 
-                if (cookies.user.favorite_list === parseInt(query)) {
+                if (cookies.user.favorite_list === parseInt(key)) {
                     setLikedMusiclist((prevSet) => {
                         prevSet.delete(object.music.apiId);
                         return new Set(prevSet);
@@ -192,15 +225,31 @@ export default function Library() {
                                                     </td>
                                                     <td
                                                         className="heart library-icon"
-                                                        onClick={() =>
-                                                            removeMusic(
-                                                                parseInt(
-                                                                    item.music.apiId
-                                                                )
+                                                        onClick={
+                                                            likedMusiclist.has(
+                                                                item.music.apiId
                                                             )
+                                                                ? () =>
+                                                                      removeMusic(
+                                                                          item.music
+                                                                              .apiId,
+                                                                          cookies
+                                                                              .user
+                                                                              .favorite_list
+                                                                      )
+                                                                : () =>
+                                                                      likeMusicFromLibrary(
+                                                                          item.music
+                                                                      )
                                                         }
                                                     >
-                                                        <BsHeartFill />
+                                                        {likedMusiclist.has(
+                                                            item.music.apiId
+                                                        ) ? (
+                                                            <AiFillHeart />
+                                                        ) : (
+                                                            <AiOutlineHeart />
+                                                        )}
                                                     </td>
 
                                                     <td
@@ -209,7 +258,8 @@ export default function Library() {
                                                             removeMusic(
                                                                 parseInt(
                                                                     item.music.apiId
-                                                                )
+                                                                ),
+                                                                parseInt(query)
                                                             )
                                                         }
                                                     >

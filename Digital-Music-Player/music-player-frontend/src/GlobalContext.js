@@ -54,7 +54,7 @@ export function AppProvider({ children }) {
                     console.log(key === cookies.user.favorite_list);
                     if (cookies.user.favorite_list === key) {
                         setLikedMusiclist((prevSet) => {
-                            return new Set(prevSet.add(response.music.apiId));
+                            return new Set(prevSet.add(response.data.music.apiId));
                         });
                     }
 

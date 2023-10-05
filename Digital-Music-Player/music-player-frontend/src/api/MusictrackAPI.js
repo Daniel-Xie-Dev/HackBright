@@ -41,6 +41,21 @@ export async function addMusicTrackToTracklist(
     }
 }
 
+export async function addMusicToTracklist(music, trackId) {
+    try {
+        const response = await axios.post(
+            `http://localhost:8080/api/v1/musicTracks/add/${trackId}`,
+            {
+                ...music,
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function removeMusicTrackFromList(isMusicSearch, musics, currentMusic) {
     try {
         console.log(currentMusic);
