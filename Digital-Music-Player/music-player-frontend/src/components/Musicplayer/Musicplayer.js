@@ -53,10 +53,7 @@ function MusicPlayer() {
     // };
 
     const handlePlayPause = () => {
-        if (audioRef.current.src === undefined) {
-            return;
-        }
-        if (audioRef.current) {
+        if (audioRef.current && audioRef.current.src) {
             setIsPlaying((value) => {
                 value ? audioRef.current.pause() : audioRef.current.play();
                 return !value;

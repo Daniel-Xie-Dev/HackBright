@@ -14,7 +14,9 @@ export default function Searchbar() {
     };
 
     const handleSearch = () => {
-        navigate(`/search/result/${searchParamRef.current.value}`);
+        const value = searchParamRef.current.value;
+        searchParamRef.current.value = "";
+        navigate(`/search/result/search/${value}`);
     };
 
     return (

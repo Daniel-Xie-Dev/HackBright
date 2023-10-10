@@ -7,7 +7,7 @@
     bottom: 0;
     padding: 10px;
     width: 100%;
-    height: 6rem;
+    height: 3rem;
 }
 
 .song-bar {
@@ -28,10 +28,10 @@
 }
 
 .image-container {
-    size: 5em;
+    size: 2em;
     flex-shrink: 0;
-    width: 5em;
-    height: 5em;
+    width: 2em;
+    height: 2em;
 }
 
 .image-container img {
@@ -40,8 +40,12 @@
     object-fit: cover;
 }
 
+.song-description {
+    display: flex;
+}
+
 .song-description p {
-    font-size: 1rem;
+    font-size: 12px;
     text-align: left;
     color: white;
 }
