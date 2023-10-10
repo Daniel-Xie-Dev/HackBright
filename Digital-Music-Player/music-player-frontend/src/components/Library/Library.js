@@ -34,6 +34,23 @@ export default function Library() {
     const handleIsEditable = () => setIsEditable(!isEditable);
     const isLibraryLoaded = library.get(parseInt(query)) !== undefined;
 
+    const handleAlbumSearch = async (apiId) => {
+        await axios
+            .get(`https://deezerdevs-deezer.p.rapidapi.com/track/${apiId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+                    "X-RapidAPI-Host": process.env.REACT_APP_HOST,
+                },
+            })
+            .then((response) => {
+                navigate(`/search/result/album/${response.data.album.id}`);
+
+                // setPlaylist(response.data.data);
+            })
+            .catch((error) => console.log(error));
+    };
+
     const likeMusicFromLibrary = async (music) => {
         const musicTrack = {
             apiId: music.apiId,
@@ -206,13 +223,34 @@ export default function Library() {
                                                     className="library-row"
                                                     key={item?.id}
                                                 >
-                                                    <td className="library-td">
+                                                    <td
+                                                        className="library-td"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/search/result/search/${item.music?.title}`
+                                                            )
+                                                        }
+                                                    >
                                                         {item.music?.title}
                                                     </td>
-                                                    <td className="library-td">
+                                                    <td
+                                                        className="library-td"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/search/result/search/${item.music?.album}`
+                                                            )
+                                                        }
+                                                    >
                                                         {item.music?.artist}
                                                     </td>
-                                                    <td className="library-td">
+                                                    <td
+                                                        className="library-td"
+                                                        onClick={() =>
+                                                            handleAlbumSearch(
+                                                                item.music.apiId
+                                                            )
+                                                        }
+                                                    >
                                                         {item.music?.album}
                                                     </td>
                                                     <td
