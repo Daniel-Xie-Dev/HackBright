@@ -4,4 +4,11 @@
     background-color: rgba(75, 129, 171, 0.8);
     border-radius: 30px;
     display: flex;
+    color: white;
+    /* overflow-y: auto; */
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
+
+/* .screen-container {
+    overflow: auto;
+} */

@@ -1,19 +1,75 @@
 .search-result {
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
-    /* flex-direction: column; */
+    /* justify-content: space-evenly; */
+
+    max-height: 85vh;
+
+    flex-direction: column;
+    /* justify-content: center; */
     /* align-items: center; */
     /* overflow-wrap: break-word; */
-    /* overflow-x: hidden;
-    overflow-y: auto; */
-    justify-content: center;
-    flex-wrap: wrap;
+    /* overflow-x: hidden; */
+    overflow-y: auto;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* flex-wrap: wrap; */
 }
 
-.music-card{
+.search-result-container {
+    display: flex;
+    width: 85%;
+    margin: auto;
+    position: relative;
+}
+
+.search-result-filter {
+    display: flex;
+    flex-direction: column;
+    height: min-content;
+    top: 10%;
+    position: sticky;
+    flex: 0.15;
+}
+
+.search-result-filter button {
+    border: 1px solid transparent;
+    outline: none;
+    border: none;
+    text-align: right;
+    font-size: 1.5rem;
+}
+
+.deactivated-filter-button {
+    background: none;
+    color: white;
+}
+
+.activated-filter-button {
+    background-color: rgb(214, 17, 27);
+    color: black;
+}
+
+.search-result-filter-buttons:hover {
+    background-color: rgb(214, 17, 27);
+    color: black;
+    border-radius: 50% 0 0 50%;
+}
+
+.search-result-list {
+    flex: 0.85;
+}
+
+.search-result-text {
+    width: 80%;
+    margin: auto;
+    border-bottom: 2px solid orangered;
+    margin-bottom: 2rem;
+}
+
+/* .music-card {
     display: flex;
     /* max-width: 10rem; */
-    /* flex-direction: row; */
-}
+/* flex-direction: row; */
+/* } */

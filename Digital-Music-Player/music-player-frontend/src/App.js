@@ -93,7 +93,7 @@ function App() {
                         <Route path="/library/:query" element={<Library />} />
 
                         <Route
-                            path="/search/result/:query"
+                            path="/search/result/:type/:query"
                             element={<SearchResult />}
                         />
                     </Routes>
