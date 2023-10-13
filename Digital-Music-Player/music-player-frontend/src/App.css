@@ -2,7 +2,7 @@
     height: 100vh;
     width: 100vw;
     background-color: rgba(75, 129, 171, 0.8);
-    border-radius: 30px;
+    /* border-radius: 30px; */
     display: flex;
     color: white;
     /* overflow-y: auto; */

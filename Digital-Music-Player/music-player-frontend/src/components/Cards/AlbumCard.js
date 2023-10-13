@@ -14,6 +14,7 @@ export default function AlbumCard(props) {
                 </div>
                 <div className="card-text">
                     <Link
+                        className="card-link"
                         to={`/search/result/album/${album.id}`}
                         // onClick={() => window.location.reload()}
                     >

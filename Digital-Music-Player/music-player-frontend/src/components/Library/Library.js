@@ -19,8 +19,10 @@ export default function Library() {
     const { query } = useParams();
     const [cookies] = useCookies();
     const {
+        playlist,
         setPlaylist,
         library,
+        playlistIndex,
         setPlaylistIndex,
         likedMusiclist,
         setLikedMusiclist,
@@ -31,8 +33,14 @@ export default function Library() {
     const trackTitleRef = useRef();
     const navigate = useNavigate();
 
-    const handleIsEditable = () => setIsEditable(!isEditable);
+    const handleIsEditable = () => {
+        // if (!isEditable) {
+        //     trackTitleRef.current.focus();
+        // }
+        setIsEditable(!isEditable);
+    };
     const isLibraryLoaded = library.get(parseInt(query)) !== undefined;
+    const isCurrentLibrary = playlist.id === parseInt(query);
 
     const handleAlbumSearch = async (apiId) => {
         await axios
@@ -171,7 +179,8 @@ export default function Library() {
                     <input
                         placeholder={library.get(parseInt(query))?.trackTitle}
                         className={
-                            parseInt(query) === cookies.user.favorite_list
+                            parseInt(query) === cookies.user.favorite_list ||
+                            !isEditable
                                 ? "library-title-disabled"
                                 : "library-title"
                         }
@@ -217,10 +226,18 @@ export default function Library() {
                                     library
                                         .get(parseInt(query))
                                         .musics.map((item, index) => {
-                                            // console.log(item);
+                                            console.log(
+                                                isCurrentLibrary,
+                                                index === playlistIndex
+                                            );
                                             return (
                                                 <tr
-                                                    className="library-row"
+                                                    className={`library-row ${
+                                                        isCurrentLibrary &&
+                                                        index === playlistIndex
+                                                            ? "selected-library-row"
+                                                            : ""
+                                                    }`}
                                                     key={item?.id}
                                                 >
                                                     <td

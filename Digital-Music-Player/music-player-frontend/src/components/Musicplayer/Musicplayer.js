@@ -9,9 +9,17 @@ import {
     AiOutlineHeart,
     AiFillHeart,
     AiOutlinePlus,
+    AiOutlineClose,
 } from "react-icons/ai";
 
-import { MdReplayCircleFilled } from "react-icons/md";
+import {
+    BsVolumeMute,
+    BsVolumeUpFill,
+    BsFillVolumeDownFill,
+    BsVolumeDownFill,
+} from "react-icons/bs";
+
+import { MdQueueMusic, MdReplayCircleFilled } from "react-icons/md";
 import axios from "axios";
 import { useAppContext } from "../../GlobalContext";
 import { useCookies } from "react-cookie";
@@ -26,7 +34,9 @@ function MusicPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [volume, setVolume] = useState(100);
     const [isRepeating, setIsRepeating] = useState(false);
+    const [showPlaylist, setShowPlaylist] = useState(false);
     const [cookies] = useCookies();
 
     const {
@@ -44,13 +54,23 @@ function MusicPlayer() {
         setLikedMusiclist,
     } = useAppContext();
 
+    const likeMusicHas = likedMusiclist.has(
+        playlist?.[playlistIndex]?.id ||
+            playlist?.musics?.[playlistIndex]?.rapid?.id ||
+            playlist?.musics?.[playlistIndex]?.music?.apiId
+    );
+
     // const isPlaylistEmpty = playlist.length === 0;
     // console.log(library);
 
     // console.log(likedMusiclist)
-    // const handleVolumeChange = (e) => {
-    //     audioRef.current.volume = e.target.value / 100;
-    // };
+    const handleVolumeChange = (e) => {
+        console.log(e.target.value);
+        if (audioRef.current) {
+            audioRef.current.volume = e.target.value / 100;
+            setVolume(parseInt(e.target.value));
+        }
+    };
 
     const handlePlayPause = () => {
         if (audioRef.current && audioRef.current.src) {
@@ -106,6 +126,20 @@ function MusicPlayer() {
         });
     };
 
+    const getPlaylist = () => {
+        if (playlist instanceof Array) {
+            return playlist;
+        } else {
+            return playlist.musics;
+        }
+    };
+
+    const renderVolumeButton = () => {
+        if (volume === 0) return <BsVolumeMute />;
+        else if (volume <= 50) return <BsVolumeDownFill />;
+        else return <BsVolumeUpFill />;
+    };
+
     const handleMusicModal = async () => {
         const apiId =
             playlist?.musics?.[playlistIndex]?.music?.apiId ||
@@ -153,6 +187,7 @@ function MusicPlayer() {
         };
 
         if (playlist.length !== 0) {
+            setIsPlaying(true);
             // console.log(playlist);
             if (playlist.musics === undefined) {
                 setIsMusicSearch(1);
@@ -203,8 +238,6 @@ function MusicPlayer() {
     };
 
     const removeMusic = async (trackId) => {
-        console.log(currentMusic);
-
         const response = await removeMusicTrackFromList(
             isMusicSearch,
             library.get(trackId)?.musics,
@@ -247,11 +280,10 @@ function MusicPlayer() {
                                 <img
                                     src={
                                         isMusicSearch > 0
-                                            ? isMusicSearch === 1
-                                                ? playlist?.[playlistIndex]?.album
-                                                      ?.cover
-                                                : playlist?.musics?.[playlistIndex]
-                                                      ?.rapid?.album?.cover
+                                            ? playlist?.[playlistIndex]?.album
+                                                  ?.cover ||
+                                              playlist?.musics?.[playlistIndex]
+                                                  ?.rapid?.album?.cover
                                             : ""
                                     }
                                     alt="alt"
@@ -260,27 +292,90 @@ function MusicPlayer() {
                             <div className="song-description">
                                 <p className="song-title">
                                     {isMusicSearch > 0
-                                        ? isMusicSearch === 1
-                                            ? playlist?.[playlistIndex]?.title
-                                            : playlist?.musics?.[playlistIndex]
-                                                  ?.rapid?.title
+                                        ? playlist?.[playlistIndex]?.title ||
+                                          playlist?.musics?.[playlistIndex]?.rapid
+                                              ?.title
                                         : ""}
                                 </p>
                                 <p className="artist">
                                     {isMusicSearch > 0
-                                        ? isMusicSearch === 1
-                                            ? playlist?.[playlistIndex]?.artist?.name
-                                            : playlist?.musics?.[playlistIndex]
-                                                  ?.rapid?.artist?.name
+                                        ? playlist?.[playlistIndex]?.artist?.name ||
+                                          playlist?.musics?.[playlistIndex]?.rapid
+                                              ?.artist?.name
                                         : ""}
                                 </p>
                             </div>
+
+                            <div
+                                className="playlist-shortcut"
+                                style={{
+                                    visibility: showPlaylist ? "visible" : "hidden",
+                                }}
+                            >
+                                <div className="playlist-shortcut-header">
+                                    <h5
+                                        className="playlist-title"
+                                        style={{ margin: 0, padding: 0 }}
+                                    >
+                                        Current Playlist
+                                    </h5>
+                                    <button
+                                        className="playlist-close"
+                                        onClick={() => setShowPlaylist(false)}
+                                    >
+                                        <AiOutlineClose />
+                                    </button>
+                                </div>
+                                <div className="playlist-shortcut-container">
+                                    <table className="playlist-table">
+                                        {getPlaylist().map((item, index) => {
+                                            return (
+                                                <tr
+                                                    onClick={() =>
+                                                        setPlaylistIndex(index)
+                                                    }
+                                                    className={`playlist-row ${
+                                                        playlistIndex === index
+                                                            ? "selected-row"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    <td>
+                                                        {item?.title ||
+                                                            item?.music?.title}
+                                                    </td>
+
+                                                    <td>
+                                                        {item?.artist?.name ||
+                                                            item?.music?.artist}
+                                                    </td>
+
+                                                    <td>
+                                                        <AiFillPlayCircle />
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </table>
+                                </div>
+                            </div>
+
+                            <i
+                                className="playlist-icons"
+                                onClick={() => {
+                                    setShowPlaylist((prevVal) => {
+                                        return !prevVal;
+                                    });
+                                }}
+                            >
+                                <MdQueueMusic />
+                            </i>
                         </>
                     ) : (
                         <></>
                     )}
                     <audio
-                        autoPlay={isPlaying}
+                        autoPlay={true}
                         className="MusicPlayerAudio"
                         ref={audioRef}
                         loop={isRepeating}
@@ -291,20 +386,14 @@ function MusicPlayer() {
                         <source type="audio/mp3" />
                         Your browser does not support audio element.
                     </audio>
+                    {/* <div className="playlist-shortcut">playlist shortcut</div> */}
                 </div>
             </div>
 
             <div className="progress-controller">
                 <div className="control-buttons">
-                    <i className="like-button">
-                        {likedMusiclist.has(
-                            isMusicSearch > 0
-                                ? isMusicSearch === 1
-                                    ? playlist?.[playlistIndex]?.id
-                                    : playlist?.musics?.[playlistIndex]?.rapid?.id ||
-                                      playlist?.musics?.[playlistIndex]?.music.apiId
-                                : ""
-                        ) ? (
+                    <i className={likeMusicHas ? "activated-button" : ""}>
+                        {likeMusicHas ? (
                             <AiFillHeart
                                 onClick={() =>
                                     removeMusic(cookies.user.favorite_list)
@@ -329,7 +418,7 @@ function MusicPlayer() {
                     <i>
                         <AiFillStepForward onClick={() => handleNextPrevious(1)} />
                     </i>
-                    <i>
+                    <i className={isRepeating ? "activated-button" : ""}>
                         <MdReplayCircleFilled onClick={handleRepeat} />
                     </i>
 
@@ -343,7 +432,7 @@ function MusicPlayer() {
                         />
                     </i>
                     <div className="progress-container">
-                        <span>{currentTime}</span>
+                        <span className="progress-span">{currentTime}</span>
                         {/* <div className="progress-bar">
                             <div className="progress"></div>
                         </div> */}
@@ -357,7 +446,21 @@ function MusicPlayer() {
                             onChange={handleMusicTimestamp}
                             onMouseUp={handleMusicMouseUp}
                         ></input>
-                        <span>{duration}</span>
+                        <span className="progress-span">{duration}</span>
+                    </div>
+
+                    <div className="volume-container">
+                        <div className="volume-icon">{renderVolumeButton()}</div>
+
+                        <input
+                            className="slider"
+                            type="range"
+                            value={volume}
+                            onChange={handleVolumeChange}
+                            min={0}
+                            max={100}
+                            step={1}
+                        ></input>
                     </div>
                 </div>
             </div>

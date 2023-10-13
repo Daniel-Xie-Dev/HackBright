@@ -104,7 +104,9 @@ export function AppProvider({ children }) {
                                 className="modal-library"
                                 onClick={() => handleAdd(keys)}
                             >
-                                <h3>{library.get(keys).trackTitle}</h3>
+                                <h3 className="modal-playlist-title">
+                                    {library.get(keys).trackTitle}
+                                </h3>
                             </div>
                         );
                     })}

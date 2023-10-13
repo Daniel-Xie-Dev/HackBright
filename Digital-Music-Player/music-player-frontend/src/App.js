@@ -80,7 +80,7 @@ function App() {
     return (
         <Router>
             <div className="main-body">
-                <Sidebar />
+                {cookies.user ? <Sidebar /> : <></>}
 
                 <div className="screen-container">
                     {cookies.user ? <Searchbar /> : <></>}

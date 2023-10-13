@@ -43,7 +43,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
 
     const handleGenreClick = (genre) => {
-        navigate(`/search/result/${genre}`);
+        navigate(`/search/result/search/${genre}`);
     };
 
     return (

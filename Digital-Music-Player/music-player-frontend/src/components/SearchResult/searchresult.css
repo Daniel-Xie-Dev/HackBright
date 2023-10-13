@@ -47,14 +47,8 @@
 }
 
 .activated-filter-button {
-    background-color: rgb(214, 17, 27);
+    background-color: #ffaa64;
     color: black;
-}
-
-.search-result-filter-buttons:hover {
-    background-color: rgb(214, 17, 27);
-    color: black;
-    border-radius: 50% 0 0 50%;
 }
 
 .search-result-list {
@@ -64,8 +58,9 @@
 .search-result-text {
     width: 80%;
     margin: auto;
-    border-bottom: 2px solid orangered;
+    border-bottom: 2px solid #ffaa64;
     margin-bottom: 2rem;
+    color: #ffaa64;
 }
 
 /* .music-card {

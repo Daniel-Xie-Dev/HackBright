@@ -4,12 +4,15 @@ import { AiFillPlayCircle, AiFillPlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 export default function MusicCard(props) {
-    const { item, handlePlayCallback } = {
+    const { item, handlePlayCallback, isCurrentIndex } = {
         ...props,
     };
     return (
         <div className="card">
-            <div className="card-container" key={item.id}>
+            <div
+                className={`card-container ${isCurrentIndex ? "selected-card" : ""}`}
+                key={item.id}
+            >
                 <div className="card-image-container">
                     <img
                         className="card-image"
@@ -19,10 +22,16 @@ export default function MusicCard(props) {
                     ></img>
                 </div>
                 <div className="card-text">
-                    <Link to={`/search/result/search/${item.title}`}>
+                    <Link
+                        className="card-link"
+                        to={`/search/result/search/${item.title}`}
+                    >
                         {item.title}
                     </Link>
-                    <Link to={`/search/result/artist/${item.artist.id}`}>
+                    <Link
+                        className="card-link"
+                        to={`/search/result/artist/${item.artist.id}`}
+                    >
                         {item.artist.name}
                     </Link>
                 </div>

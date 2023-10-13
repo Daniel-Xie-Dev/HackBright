@@ -5,12 +5,13 @@ import "./sidebar.css";
 
 ///// React icons //////
 import { AiFillHome } from "react-icons/ai";
-import { BiTrendingUp } from "react-icons/bi";
+// import { BiTrendingUp } from "react-icons/bi";
 import { BiSolidPlaylist } from "react-icons/bi";
 import { BsFillArrowRightSquareFill } from "react-icons/bs";
-import { BsFillArrowLeftSquareFill } from "react-icons/bs";
+// import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { MdLibraryMusic } from "react-icons/md";
 
 export default function Sidebar() {
     // const [image, setImage] = useState("");
@@ -43,36 +44,21 @@ export default function Sidebar() {
                     to="/dashboard"
                     icon={<AiFillHome />}
                 />
-                {/* <SideBarButton
-                    title="Trending"
-                    to="/trending"
-                    icon={<BiTrendingUp />}
-                /> */}
-                {cookies.user ? (
-                    <SideBarButton
-                        title="Playlist"
-                        to="/playlist"
-                        icon={<BiSolidPlaylist />}
-                    />
-                ) : (
-                    <></>
-                )}
+
+                <SideBarButton
+                    title="Playlist"
+                    to="/playlist"
+                    icon={<MdLibraryMusic />}
+                />
             </div>
             <div className="setting-buttons">
-                {cookies.user ? (
-                    <SideBarButton
-                        title="Sign Out"
-                        to="/login"
-                        icon={<BsFillArrowRightSquareFill />}
-                        callback={handleSignout}
-                    />
-                ) : (
-                    <SideBarButton
-                        title="Sign In"
-                        to="/login"
-                        icon={<BsFillArrowRightSquareFill />}
-                    />
-                )}
+                <SideBarButton
+                    title="Sign Out"
+                    to="/login"
+                    icon={<BsFillArrowRightSquareFill />}
+                    callback={handleSignout}
+                />
+
                 {/* <SideBarButton title="Log In" to="/login" icon={< BsFillArrowLeftSquareFill />} /> */}
             </div>
         </div>

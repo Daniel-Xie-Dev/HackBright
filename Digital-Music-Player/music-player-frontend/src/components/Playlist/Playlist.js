@@ -66,7 +66,7 @@ export default function Playlist() {
             </Modal>
             <div className="playlist">
                 <div className="playlist-header">
-                    <h1>Your playlists</h1>
+                    <h1>My playlists</h1>
                 </div>
 
                 <div className="playlist-container">

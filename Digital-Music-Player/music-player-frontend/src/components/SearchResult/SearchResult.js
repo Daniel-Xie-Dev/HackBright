@@ -12,7 +12,8 @@ export default function SearchResult() {
     const { type, query } = useParams();
 
     console.log(type, query);
-    const { setPlaylist, setPlaylistIndex } = useAppContext();
+    const { playlist, setPlaylist, playlistIndex, setPlaylistIndex } =
+        useAppContext();
     const navigate = useNavigate();
     const [result, setResult] = useState([]);
     const [singerMap, setSingerMap] = useState(new Map());
@@ -42,6 +43,9 @@ export default function SearchResult() {
                     <MusicCard
                         item={item}
                         handlePlayCallback={() => handlePlaylist(index)}
+                        isCurrentIndex={
+                            playlist === result && index === playlistIndex
+                        }
                     ></MusicCard>
                 );
             });

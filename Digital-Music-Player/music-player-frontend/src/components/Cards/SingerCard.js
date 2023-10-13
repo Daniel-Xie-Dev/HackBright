@@ -13,7 +13,10 @@ export default function SingerCard(props) {
                     <img className="card-image" src={singer.picture} alt=""></img>
                 </div>
                 <div className="card-text">
-                    <Link to={`/search/result/search/${singer.name}`}>
+                    <Link
+                        className="card-link"
+                        to={`/search/result/search/${singer.name}`}
+                    >
                         {singer.name}
                     </Link>
                 </div>
