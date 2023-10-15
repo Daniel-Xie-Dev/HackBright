@@ -22,9 +22,10 @@
     margin: auto;
     animation: show 1s ease-in-out 0s 1 normal forwards;
     /* background: rgb(2, 0, 36); */
-    background-color: rgba(75, 129, 171, 0.8);
+    background-color: rgba(75, 129, 171, 1);
     border: 1px solid #ffaa64;
     color: white;
+    /* max-height: 50%; */
 }
 
 .modal-div-invisible {
@@ -34,16 +35,19 @@
 .modal-div-visible {
     display: block;
     /* opacity: 0; */
-    background-color: rgba(75, 129, 171, 0.8);
+    background-color: rgba(75, 129, 171, 1);
     /* padding: 1rem 2rem 1rem 2rem; */
     /* border-radius: 10px; */
-    max-width: 15%;
-    max-height: 45%;
+    max-width: 20%;
+    max-height: 400px;
+    /* max-height: 50%; */
+
 }
 
 .modal-bar {
     display: flex;
     justify-content: flex-end;
+    height: 35px;
     width: 100%;
 }
 
@@ -78,19 +82,25 @@
     /* padding: 0px 0px 0px 15px; */
 }
 
+.modal-playlists{
+    overflow-y: scroll;
+    height: 360px;
+    /* max-height: inherit; */
+}
+
 @keyframes show {
     0% {
         opacity: 0;
-        width: 0;
-        height: 0;
-        transform: scale(0.5);
+        /* width: 0;
+        height: 0; */
+        /* transform: scale(0.5); */
     }
 
-    25% {
+    /* 25% {
         width: 15%;
         height: 45%;
         transform: scale(1);
-    }
+    } */
 
     100% {
         opacity: 1;

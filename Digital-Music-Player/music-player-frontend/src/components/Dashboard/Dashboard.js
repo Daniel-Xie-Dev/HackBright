@@ -37,7 +37,7 @@ var musicGenres = {
     // "Opera",
 };
 
-var genres = ["Pop", "Hip-Hop", "Country", "R&B (Rhythm and Blues)", "Latin"];
+var genres = ["Rock", "Pop", "Hip-Hop", "R&B (Rhythm and Blues)", "Latin", "Country", "Jazz", "Rock", "Pop", "Hip-Hop", "R&B (Rhythm and Blues)", "Latin", "Country", "Jazz", "Rock", "Pop", "Hip-Hop", "R&B (Rhythm and Blues)", "Latin", "Country", "Jazz"];
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -48,11 +48,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <div className="dashboard-header">
-                <div className="explore-header-card">
-                    <h1 className="main-title">Dashboard</h1>
-                </div>
-            </div>
+          
             {true ? (
                 <>
                     <div className="dashboard">

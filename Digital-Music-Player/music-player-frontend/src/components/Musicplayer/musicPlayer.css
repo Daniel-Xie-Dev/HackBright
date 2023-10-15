@@ -16,9 +16,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 30%;
-    max-width: 30%;
+    /* justify-content: center; */
+    /* width: 30%; */
+    max-width: 20%;
 }
 
 .song {
@@ -26,7 +26,8 @@
     align-items: center;
     gap: 1em;
     position: relative;
-    width: 400px;
+    width: 200px;
+    /* max-width: 20%; */
 }
 
 .image-container {

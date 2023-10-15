@@ -4,7 +4,7 @@ import { AiFillPlayCircle, AiFillPlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 export default function MusicCard(props) {
-    const { item, handlePlayCallback, isCurrentIndex } = {
+    const { item, handleMusicModalCallback, handlePlayCallback, isCurrentIndex } = {
         ...props,
     };
     return (
@@ -40,7 +40,7 @@ export default function MusicCard(props) {
                     <AiFillPlayCircle />
                 </div>
 
-                <div className="card-buttons">
+                <div className="card-buttons" onClick={() => handleMusicModalCallback(item.id)}>
                     <AiFillPlusCircle />
                 </div>
             </div>

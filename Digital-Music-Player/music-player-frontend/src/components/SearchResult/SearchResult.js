@@ -12,7 +12,7 @@ export default function SearchResult() {
     const { type, query } = useParams();
 
     console.log(type, query);
-    const { playlist, setPlaylist, playlistIndex, setPlaylistIndex } =
+    const { playlist, setPlaylist, playlistIndex, setPlaylistIndex, setData, setShowModal } =
         useAppContext();
     const navigate = useNavigate();
     const [result, setResult] = useState([]);
@@ -43,6 +43,7 @@ export default function SearchResult() {
                     <MusicCard
                         item={item}
                         handlePlayCallback={() => handlePlaylist(index)}
+                        handleMusicModalCallback={handleMusicModal}
                         isCurrentIndex={
                             playlist === result && index === playlistIndex
                         }
@@ -61,6 +62,25 @@ export default function SearchResult() {
                 return <AlbumCard album={album}></AlbumCard>;
             });
         }
+    };
+
+    const handleMusicModal = async (apiId) => {
+
+        await axios
+            .get(`https://deezerdevs-deezer.p.rapidapi.com/track/${apiId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+                    "X-RapidAPI-Host": process.env.REACT_APP_HOST,
+                },
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    setData(response.data);
+                    setShowModal(true);
+                }
+            })
+            .catch((error) => console.log(error));
     };
 
     useEffect(() => {
