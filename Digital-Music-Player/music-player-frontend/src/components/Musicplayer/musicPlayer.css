@@ -93,7 +93,7 @@
     bottom: 5.75rem;
     height: 500px;
     max-height: 40vh;
-    background-color: rgba(75, 129, 171, 0.8);
+    background-color: rgba(58, 71, 80, 1);
     /* overflow-y: hidden; */
 }
 
@@ -121,7 +121,7 @@
 }
 
 .playlist-shortcut-container {
-    background-color: black;
+    background-color: rgba(58, 71, 80, 1);
     /* position: fixed; */
     max-width: 400px;
     height: 100%;
@@ -170,11 +170,12 @@
 
 .playlist-row:hover {
     cursor: pointer;
-    background-color: lightblue;
+    background-color: rgba(75, 129, 171, 0.8);
 }
 
 .selected-row {
-    background-color: lightblue;
+    background-color: rgba(75, 129, 171, 0.8);
+    /* color: #ffaa64; */
 }
 
 .progress-controller {

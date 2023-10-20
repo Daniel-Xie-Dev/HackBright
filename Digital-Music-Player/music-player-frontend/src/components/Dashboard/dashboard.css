@@ -26,7 +26,8 @@
     /* padding-left: 2vw; */
     /* margin-bottom: 0.5em; */
     /* flex-wrap: wrap; */
-    overflow-y: scroll;
+    overflow-y: auto;
+    /* overflow-y: scroll; */
 }
 
 .dashboard .list .item {

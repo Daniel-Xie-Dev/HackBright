@@ -29,10 +29,10 @@ export default function Searchbar() {
                     ref={searchParamRef}
                     onKeyDown={handleKey}
                 />
-                <datalist id="music-list">
+                {/* <datalist id="music-list">
                     <option value="Taylor Swift">Taylor Swift</option>
                     <option value="Pokemon">Pokemon</option>
-                </datalist>
+                </datalist> */}
                 <button class="button" onClick={handleSearch}>
                     <span>
                         <AiOutlineSearch />

@@ -88,13 +88,17 @@ function MusicPlayer() {
     };
 
     const handleMusicMouseDown = () => {
-        setIsPlaying(false);
-        audioRef.current.pause();
+        if (audioRef.current && audioRef.current.src) {
+            setIsPlaying(false);
+            audioRef.current.pause();
+        }
     };
 
     const handleMusicMouseUp = () => {
-        setIsPlaying(true);
-        audioRef.current.play();
+        if (audioRef.current && audioRef.current.src) {
+            setIsPlaying(true);
+            audioRef.current.play();
+        }
     };
 
     const handleMusicTimestamp = (e) => {
@@ -256,11 +260,13 @@ function MusicPlayer() {
                         <div className="image-container">
                             <img
                                 src={
-                                    isMusicSearch > 0
-                                        ? playlist?.[playlistIndex]?.album?.cover ||
-                                          playlist?.musics?.[playlistIndex]?.rapid
-                                              ?.album?.cover
-                                        : ""
+                                    isMusicSearch > 0 ? (
+                                        playlist?.[playlistIndex]?.album?.cover ||
+                                        playlist?.musics?.[playlistIndex]?.rapid
+                                            ?.album?.cover
+                                    ) : (
+                                        <></>
+                                    )
                                 }
                                 alt=""
                             />

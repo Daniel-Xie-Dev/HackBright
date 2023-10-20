@@ -35,7 +35,7 @@
 .modal-div-visible {
     display: block;
     /* opacity: 0; */
-    background-color: rgba(75, 129, 171, 1);
+    background-color: rgba(58, 71, 80, 1);
     height: min-content;
     /* padding: 1rem 2rem 1rem 2rem; */
     /* border-radius: 10px; */
@@ -63,7 +63,7 @@
 .modal-library {
     width: 80%;
     margin: auto;
-    padding-left: 5px;
+    /* padding-left: 5px; */
     border-radius: 5px;
     color: white;
     cursor: pointer;
@@ -76,11 +76,12 @@
 
 .modal-playlist-title {
     overflow: hidden;
+    text-overflow: ellipsis;
     /* padding: 0px 0px 0px 15px; */
 }
 
 .modal-playlists {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 360px;
     /* max-height: inherit; */
 }

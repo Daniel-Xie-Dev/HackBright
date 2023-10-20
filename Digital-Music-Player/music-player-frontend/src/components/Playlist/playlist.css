@@ -15,6 +15,10 @@
     padding-right: 1vw; */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    grid-auto-rows: 14rem;
+    /* padding-top: 2vh; */
+    align-items: center;
+    justify-content: center;
     /* height: max-content; */
     /* flex-wrap: wrap;
     gap: 0.5em; */
@@ -23,7 +27,7 @@
     /* padding-left: 2vw; */
     /* padding-right: 2vw; */
 
-    overflow-y: scroll;
+    overflow-y: auto;
     /* padding-left: 3rem;
     padding-right: 3rem; */
     /* justify-content: center; */
@@ -42,7 +46,7 @@
     font-size: larger;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     /* margin: 2rem; */
     background: linear-gradient(-225deg, #473b7b 0%, #3584a7 51%, #30d2be 100%);
     transition: all 0.3s ease-in-out;
@@ -63,4 +67,8 @@
     /* align-items: center; */
     padding: auto;
     overflow-wrap: break-word;
+}
+
+.playlist-modal {
+    background-color: rgba(58, 71, 80, 0.8);
 }

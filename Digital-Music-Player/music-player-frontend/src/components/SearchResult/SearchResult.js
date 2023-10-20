@@ -185,8 +185,6 @@ export default function SearchResult() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type, query]);
 
-    console.log(type, query);
-
     return (
         <div className="search-result">
             <div className="search-result-text">

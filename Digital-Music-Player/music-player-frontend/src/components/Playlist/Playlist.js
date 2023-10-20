@@ -4,7 +4,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { useAppContext } from "../../GlobalContext";
 
 export default function Playlist() {
@@ -18,7 +18,6 @@ export default function Playlist() {
     const handleOpen = () => setOpen(true);
     const navigate = useNavigate();
 
-    console.log(library);
     const handleCreatePlaylist = async () => {
         await axios
             .post(
@@ -46,15 +45,34 @@ export default function Playlist() {
 
     return (
         <>
-            <Modal show={open} onHide={handleClose} centered>
-                <Modal.Header closeButton>
+            <Modal
+                // dialogClassName={"primaryModal"}
+                // style={{ background: "darkgray" }}
+                // className="playlist-modal"
+                show={open}
+                onHide={handleClose}
+                centered
+                animation
+                keyboard
+            >
+                <Modal.Header closeButton className="playlist-modal">
                     <Modal.Title>Create your own playlist</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <label>Title: </label>
-                    <input ref={titleRef}></input>
+
+                <Modal.Body className="playlist-modal">
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Playlist Title</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="My favorite songs"
+                                autoFocus
+                                ref={titleRef}
+                            />
+                        </Form.Group>
+                    </Form>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className="playlist-modal">
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
