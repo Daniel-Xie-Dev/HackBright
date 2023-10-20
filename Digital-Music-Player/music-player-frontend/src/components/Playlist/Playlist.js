@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./playlist.css";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useCookies } from "react-cookie";
@@ -8,8 +8,7 @@ import { Button, Modal } from "react-bootstrap";
 import { useAppContext } from "../../GlobalContext";
 
 export default function Playlist() {
-    const [cookies, setCookies] = useCookies();
-    const [playlists, setPlaylists] = useState([]);
+    const [cookies] = useCookies();
     const titleRef = useRef();
     const [open, setOpen] = useState(false);
 
@@ -85,7 +84,9 @@ export default function Playlist() {
                                     className="playlist-card"
                                     onClick={() => navigate(`/library/${key}`)}
                                 >
-                                    {library.get(key).trackTitle}
+                                    <p className="playlist-card-title">
+                                        {library.get(key).trackTitle}
+                                    </p>
                                 </div>
                             </>
                         );

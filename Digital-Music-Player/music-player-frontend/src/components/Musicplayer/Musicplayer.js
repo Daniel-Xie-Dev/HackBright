@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./musicPlayer.css";
 import {
     // AiOutlineLike,
@@ -12,12 +12,7 @@ import {
     AiOutlineClose,
 } from "react-icons/ai";
 
-import {
-    BsVolumeMute,
-    BsVolumeUpFill,
-    BsFillVolumeDownFill,
-    BsVolumeDownFill,
-} from "react-icons/bs";
+import { BsVolumeMute, BsVolumeUpFill, BsVolumeDownFill } from "react-icons/bs";
 
 import { MdQueueMusic, MdReplayCircleFilled } from "react-icons/md";
 import axios from "axios";
@@ -29,13 +24,8 @@ import {
 } from "../../api/MusictrackAPI";
 
 function MusicPlayer() {
-    const audioRef = useRef();
     const [currentMusic, setCurrentMusic] = useState({});
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
     const [volume, setVolume] = useState(100);
-    const [isRepeating, setIsRepeating] = useState(false);
     const [showPlaylist, setShowPlaylist] = useState(false);
     const [cookies] = useCookies();
 
@@ -46,12 +36,21 @@ function MusicPlayer() {
         isMusicSearch,
         setIsMusicSearch,
         library,
+        isPlaying,
+        setIsPlaying,
         setLibrary,
         setShowModal,
         setData,
         setPlaylist,
         likedMusiclist,
         setLikedMusiclist,
+        audioRef,
+        isRepeating,
+        setIsRepeating,
+        currentTime,
+        setCurrentTime,
+        duration,
+        handleNextPrevious,
     } = useAppContext();
 
     const likeMusicHas = likedMusiclist.has(
@@ -98,32 +97,10 @@ function MusicPlayer() {
         audioRef.current.play();
     };
 
-    const handleLoadedMetaData = () => {
-        setDuration(Math.floor(audioRef.current.duration));
-    };
-
     const handleMusicTimestamp = (e) => {
         audioRef.current.currentTime = parseInt(e.target.value);
         setCurrentTime(parseInt(e.target.value));
         // console.log(e.target.value);
-    };
-
-    const handleMusicPlaying = () => {
-        // console.log(audioRef.current.currentSrc);
-        setCurrentTime(Math.floor(audioRef.current.currentTime));
-    };
-
-    const handleNextPrevious = (index) => {
-        let size = 0;
-        if (isMusicSearch === 1) size = playlist.length;
-        else if (isMusicSearch === 2) size = playlist.musics?.length;
-
-        setPlaylistIndex((initialValue) => {
-            const playlistIndex =
-                initialValue + index < 0 ? size - 1 : (initialValue + index) % size;
-            console.log(initialValue);
-            return playlistIndex;
-        });
     };
 
     const getPlaylist = () => {
@@ -205,6 +182,7 @@ function MusicPlayer() {
                 audioRef.current.src = playlist.musics[playlistIndex]?.rapid.preview;
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playlist, playlistIndex]);
 
     const addMusic = async (trackId) => {
@@ -274,92 +252,90 @@ function MusicPlayer() {
         <div className="music-player">
             <div className="song-bar">
                 <div className="song">
-                    {playlist.length !== 0 ? (
-                        <>
-                            <div className="image-container">
-                                <img
-                                    src={
-                                        isMusicSearch > 0
-                                            ? playlist?.[playlistIndex]?.album
-                                                  ?.cover ||
-                                              playlist?.musics?.[playlistIndex]
-                                                  ?.rapid?.album?.cover
-                                            : ""
-                                    }
-                                    alt="alt"
-                                />
-                            </div>
-                            <div className="song-description">
-                                <p className="song-title">
-                                    {isMusicSearch > 0
-                                        ? playlist?.[playlistIndex]?.title ||
+                    <>
+                        <div className="image-container">
+                            <img
+                                src={
+                                    isMusicSearch > 0
+                                        ? playlist?.[playlistIndex]?.album?.cover ||
                                           playlist?.musics?.[playlistIndex]?.rapid
-                                              ?.title
-                                        : ""}
-                                </p>
-                                <p className="artist">
-                                    {isMusicSearch > 0
-                                        ? playlist?.[playlistIndex]?.artist?.name ||
-                                          playlist?.musics?.[playlistIndex]?.rapid
-                                              ?.artist?.name
-                                        : ""}
-                                </p>
+                                              ?.album?.cover
+                                        : ""
+                                }
+                                alt=""
+                            />
+                        </div>
+                        <div className="song-description">
+                            <p className="song-title">
+                                {isMusicSearch > 0
+                                    ? playlist?.[playlistIndex]?.title ||
+                                      playlist?.musics?.[playlistIndex]?.rapid?.title
+                                    : ""}
+                            </p>
+                            <p className="artist">
+                                {isMusicSearch > 0
+                                    ? playlist?.[playlistIndex]?.artist?.name ||
+                                      playlist?.musics?.[playlistIndex]?.rapid
+                                          ?.artist?.name
+                                    : ""}
+                            </p>
+                        </div>
+
+                        <div
+                            className="playlist-shortcut"
+                            style={{
+                                visibility: showPlaylist ? "visible" : "hidden",
+                            }}
+                        >
+                            <div className="playlist-shortcut-header">
+                                <h5
+                                    className="playlist-title"
+                                    style={{ margin: 0, padding: 0 }}
+                                >
+                                    Current Playlist
+                                </h5>
+                                <button
+                                    className="playlist-close"
+                                    onClick={() => setShowPlaylist(false)}
+                                >
+                                    <AiOutlineClose />
+                                </button>
                             </div>
+                            <div className="playlist-shortcut-container">
+                                <table className="playlist-table">
+                                    {getPlaylist().map((item, index) => {
+                                        return (
+                                            <tr
+                                                onClick={() =>
+                                                    setPlaylistIndex(index)
+                                                }
+                                                className={`playlist-row ${
+                                                    playlistIndex === index
+                                                        ? "selected-row"
+                                                        : ""
+                                                }`}
+                                            >
+                                                <td>
+                                                    {item?.title ||
+                                                        item?.music?.title}
+                                                </td>
 
-                            <div
-                                className="playlist-shortcut"
-                                style={{
-                                    visibility: showPlaylist ? "visible" : "hidden",
-                                }}
-                            >
-                                <div className="playlist-shortcut-header">
-                                    <h5
-                                        className="playlist-title"
-                                        style={{ margin: 0, padding: 0 }}
-                                    >
-                                        Current Playlist
-                                    </h5>
-                                    <button
-                                        className="playlist-close"
-                                        onClick={() => setShowPlaylist(false)}
-                                    >
-                                        <AiOutlineClose />
-                                    </button>
-                                </div>
-                                <div className="playlist-shortcut-container">
-                                    <table className="playlist-table">
-                                        {getPlaylist().map((item, index) => {
-                                            return (
-                                                <tr
-                                                    onClick={() =>
-                                                        setPlaylistIndex(index)
-                                                    }
-                                                    className={`playlist-row ${
-                                                        playlistIndex === index
-                                                            ? "selected-row"
-                                                            : ""
-                                                    }`}
-                                                >
-                                                    <td>
-                                                        {item?.title ||
-                                                            item?.music?.title}
-                                                    </td>
+                                                <td>
+                                                    {item?.artist?.name ||
+                                                        item?.music?.artist}
+                                                </td>
 
-                                                    <td>
-                                                        {item?.artist?.name ||
-                                                            item?.music?.artist}
-                                                    </td>
-
-                                                    <td>
-                                                        <AiFillPlayCircle />
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </table>
-                                </div>
+                                                <td>
+                                                    <AiFillPlayCircle />
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </table>
                             </div>
+                        </div>
 
+                        {playlist.length !== 0 ? (
                             <i
                                 className="playlist-icons"
                                 onClick={() => {
@@ -370,22 +346,11 @@ function MusicPlayer() {
                             >
                                 <MdQueueMusic />
                             </i>
-                        </>
-                    ) : (
-                        <></>
-                    )}
-                    <audio
-                        autoPlay={true}
-                        className="MusicPlayerAudio"
-                        ref={audioRef}
-                        loop={isRepeating}
-                        onTimeUpdate={handleMusicPlaying}
-                        onLoadedMetadata={handleLoadedMetaData}
-                        onEnded={() => handleNextPrevious(1)}
-                    >
-                        <source type="audio/mp3" />
-                        Your browser does not support audio element.
-                    </audio>
+                        ) : (
+                            <></>
+                        )}
+                    </>
+
                     {/* <div className="playlist-shortcut">playlist shortcut</div> */}
                 </div>
             </div>

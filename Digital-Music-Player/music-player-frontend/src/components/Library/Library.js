@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "./library.css";
 import {
     AiFillDelete,
@@ -8,7 +8,7 @@ import {
     AiOutlineHeart,
     AiOutlineMinus,
 } from "react-icons/ai";
-import { BsFillPlayFill, BsHeartFill } from "react-icons/bs";
+import { BsFillPlayFill } from "react-icons/bs";
 import { useAppContext } from "../../GlobalContext";
 import axios from "axios";
 import { addMusicToTracklist, removeMusicLibrary } from "../../api/MusictrackAPI";

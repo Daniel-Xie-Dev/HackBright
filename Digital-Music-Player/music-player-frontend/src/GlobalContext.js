@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import axios from "axios";
 import "./shared/globalStyles.css";
 import { AiOutlineClose } from "react-icons/ai";
@@ -19,6 +19,11 @@ export function AppProvider({ children }) {
     const [playlistIndex, setPlaylistIndex] = useState(0);
     const [data, setData] = useState({});
     const [likedMusiclist, setLikedMusiclist] = useState(new Set());
+    const [isPlaying, setIsPlaying] = useState(false);
+    const audioRef = useRef();
+    const [isRepeating, setIsRepeating] = useState(false);
+    const [duration, setDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
 
     const handleAdd = async (key) => {
         const musicTrack = {
@@ -67,11 +72,35 @@ export function AppProvider({ children }) {
             });
     };
 
+    const handleLoadedMetaData = () => {
+        setDuration(Math.floor(audioRef.current.duration));
+    };
+
+    const handleMusicPlaying = () => {
+        // console.log(audioRef.current.currentSrc);
+        setCurrentTime(Math.floor(audioRef.current.currentTime));
+    };
+
+    const handleNextPrevious = (index) => {
+        let size = 0;
+        if (isMusicSearch === 1) size = playlist.length;
+        else if (isMusicSearch === 2) size = playlist.musics?.length;
+
+        setPlaylistIndex((initialValue) => {
+            const playlistIndex =
+                initialValue + index < 0 ? size - 1 : (initialValue + index) % size;
+            console.log(initialValue);
+            return playlistIndex;
+        });
+    };
+
     const contextValue = {
         playlist,
         setPlaylist,
         library,
         isMusicSearch,
+        isPlaying,
+        setIsPlaying,
         setIsMusicSearch,
         setLibrary,
         setShowModal,
@@ -80,6 +109,13 @@ export function AppProvider({ children }) {
         setPlaylistIndex,
         likedMusiclist,
         setLikedMusiclist,
+        audioRef,
+        isRepeating,
+        setIsRepeating,
+        currentTime,
+        setCurrentTime,
+        duration,
+        handleNextPrevious,
     };
 
     return (
@@ -112,6 +148,19 @@ export function AppProvider({ children }) {
                     })}
                 </div>
             </div>
+
+            <audio
+                autoPlay={true}
+                className="MusicPlayerAudio"
+                ref={audioRef}
+                loop={isRepeating}
+                onTimeUpdate={handleMusicPlaying}
+                onLoadedMetadata={handleLoadedMetaData}
+                onEnded={() => handleNextPrevious(1)}
+            >
+                <source type="audio/mp3" />
+                Your browser does not support audio element.
+            </audio>
 
             {children}
         </AppContext.Provider>

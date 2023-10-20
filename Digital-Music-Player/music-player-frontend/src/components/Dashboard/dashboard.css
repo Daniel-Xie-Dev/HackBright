@@ -15,37 +15,30 @@
 
 .dashboard .list {
     background-color: rgba(58, 71, 80, 0.6);
-    display: flex;
-    justify-content: space-evenly;
-    height: max-content;
-    max-height: 65vh;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    height: 70vh;
+    /* justify-content: flex-start; */
+    /* max-height: 75vh; */
     border-radius: 1em;
-    gap: 0.5em;
+    gap: 1.5em;
     padding: 1em;
-    margin-bottom: 0.5em;
-    flex-wrap: wrap;
-    
+    /* padding-left: 2vw; */
+    /* margin-bottom: 0.5em; */
+    /* flex-wrap: wrap; */
     overflow-y: scroll;
-}
-
-.dashboard .list::-webkit-scrollbar {
-    border-radius: 10px;
-    background-color: #a4a8b4;
-    height: 8px;
-}
-
-.dashboard .list::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: rgba(75, 129, 171, 0.8);
 }
 
 .dashboard .list .item {
     display: flex;
     flex-direction: column;
     min-width: 100px;
+
     width: 150px;
     height: 175px;
     padding: 1em;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 10px;
     background-image: linear-gradient(
         to left,

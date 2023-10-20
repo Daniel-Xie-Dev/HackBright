@@ -11,9 +11,17 @@ import SingerCard from "../Cards/SingerCard";
 export default function SearchResult() {
     const { type, query } = useParams();
 
-    console.log(type, query);
-    const { playlist, setPlaylist, playlistIndex, setPlaylistIndex, setData, setShowModal } =
-        useAppContext();
+    const {
+        playlist,
+        setPlaylist,
+        playlistIndex,
+        setPlaylistIndex,
+        setData,
+        setShowModal,
+        audioRef,
+        isPlaying,
+        setIsPlaying,
+    } = useAppContext();
     const navigate = useNavigate();
     const [result, setResult] = useState([]);
     const [singerMap, setSingerMap] = useState(new Map());
@@ -25,6 +33,20 @@ export default function SearchResult() {
         "Content-Type": "application/json",
         "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
         "X-RapidAPI-Host": process.env.REACT_APP_HOST,
+    };
+
+    const handlePlayPauseCallback = (index) => {
+        if (playlist !== result || index !== playlistIndex) {
+            setPlaylist(result);
+            setPlaylistIndex(index);
+        } else {
+            if (audioRef.current && audioRef.current.src) {
+                setIsPlaying((value) => {
+                    value ? audioRef.current.pause() : audioRef.current.play();
+                    return !value;
+                });
+            }
+        }
     };
 
     const handlePlaylist = (input) => {
@@ -43,10 +65,13 @@ export default function SearchResult() {
                     <MusicCard
                         item={item}
                         handlePlayCallback={() => handlePlaylist(index)}
+                        handlePlayPauseCallback={handlePlayPauseCallback}
                         handleMusicModalCallback={handleMusicModal}
+                        isPlaying={isPlaying}
                         isCurrentIndex={
                             playlist === result && index === playlistIndex
                         }
+                        index={index}
                     ></MusicCard>
                 );
             });
@@ -65,7 +90,6 @@ export default function SearchResult() {
     };
 
     const handleMusicModal = async (apiId) => {
-
         await axios
             .get(`https://deezerdevs-deezer.p.rapidapi.com/track/${apiId}`, {
                 headers: {
@@ -158,6 +182,7 @@ export default function SearchResult() {
         setPageState(0);
 
         // window.location.reload();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type, query]);
 
     console.log(type, query);

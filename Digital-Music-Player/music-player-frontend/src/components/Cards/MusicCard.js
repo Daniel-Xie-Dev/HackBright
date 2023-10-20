@@ -1,12 +1,25 @@
 import React from "react";
 import "./card.css";
-import { AiFillPlayCircle, AiFillPlusCircle } from "react-icons/ai";
+import {
+    AiFillPauseCircle,
+    AiFillPlayCircle,
+    AiFillPlusCircle,
+} from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 export default function MusicCard(props) {
-    const { item, handleMusicModalCallback, handlePlayCallback, isCurrentIndex } = {
+    const {
+        item,
+        handlePlayCallback,
+        isPlaying,
+        handlePlayPauseCallback,
+        handleMusicModalCallback,
+        isCurrentIndex,
+        index,
+    } = {
         ...props,
     };
+
     return (
         <div className="card">
             <div
@@ -36,11 +49,23 @@ export default function MusicCard(props) {
                     </Link>
                 </div>
 
-                <div className="card-buttons" onClick={handlePlayCallback}>
-                    <AiFillPlayCircle />
+                <div
+                    className="card-buttons"
+                    onClick={() => handlePlayPauseCallback(index)}
+                >
+                    {console.log(isCurrentIndex)}
+                    {console.log(isPlaying)}
+                    {isCurrentIndex && isPlaying ? (
+                        <AiFillPauseCircle />
+                    ) : (
+                        <AiFillPlayCircle />
+                    )}
                 </div>
 
-                <div className="card-buttons" onClick={() => handleMusicModalCallback(item.id)}>
+                <div
+                    className="card-buttons"
+                    onClick={() => handleMusicModalCallback(item.id)}
+                >
                     <AiFillPlusCircle />
                 </div>
             </div>
