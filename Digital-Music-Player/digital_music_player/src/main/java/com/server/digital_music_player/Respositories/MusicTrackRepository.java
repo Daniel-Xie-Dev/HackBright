@@ -11,4 +11,6 @@ import com.server.digital_music_player.Entities.TrackList;
 @Repository
 public interface MusicTrackRepository extends JpaRepository<MusicTracks, Long> {
     List<MusicTracks> findAllByTrackList(TrackList trackList);
+
+    void deleteAllByTracklist(TrackList trackList);
 }

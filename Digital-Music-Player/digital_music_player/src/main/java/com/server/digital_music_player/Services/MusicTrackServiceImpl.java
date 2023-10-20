@@ -16,6 +16,7 @@ import com.server.digital_music_player.Respositories.TrackListRepository;
 
 import jakarta.transaction.Transactional;
 
+
 @Service
 public class MusicTrackServiceImpl implements MusicTrackService {
 
@@ -82,6 +83,15 @@ public class MusicTrackServiceImpl implements MusicTrackService {
         if (musicTrackOptional.isPresent()) {
             musicTrackRepository.delete(musicTrackOptional.get());
         }
+    }
+
+    @Transactional
+    public void deleteAllMusicTrackByTracklistId(TrackList trackList){
+        List<MusicTracks> musicTracksList = musicTrackRepository.findAllByTrackList(trackList);
+        if(!musicTracksList.isEmpty()) {
+            musicTrackRepository.deleteAllByTracklist(trackList);
+        }
+
     }
 
 }
