@@ -10,7 +10,7 @@
     A web-based music platform where users can explore genres, create playlists, and control music playback with interactive features, all while customizing their experience through user accounts.
     <br/>
     <br/>
-    <a href="https://github.com/Daniel-Xie-Dev/Digital-Music-Player">View Demo</a>
+    <a href="[https://github.com/Daniel-Xie-Dev/Digital-Music-Player](https://youtu.be/-dwJMP6gUmk)">View Demo</a>
     .
   </p>
 </p>
