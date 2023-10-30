@@ -15,8 +15,6 @@
   </p>
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/Daniel-Xie-Dev/Digital-Music-Player/total) ![Contributors](https://img.shields.io/github/contributors/Daniel-Xie-Dev/Digital-Music-Player?color=dark-green) ![Issues](https://img.shields.io/github/issues/Daniel-Xie-Dev/Digital-Music-Player) 
-
 ## Table Of Contents
 
 * [About the Project](#about-the-project)
@@ -31,7 +29,7 @@
 
 ## About The Project
 
-![Screen Shot](images/screenshot.png)
+![Screen Shot](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/d7fb5a94-e132-45af-90c9-198e7fa3dba2)
 
 Listening to music is a universally cherished activity, offering relaxation and enjoyment to people from all walks of life. However, musical tastes can vary greatly among individuals, drawing from diverse sources like Spotify, SoundCloud, and traditional radio.
 
