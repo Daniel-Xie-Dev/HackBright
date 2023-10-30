@@ -1,7 +1,7 @@
 <br/>
 <p align="center">
   <a href="https://github.com/Daniel-Xie-Dev/Digital-Music-Player">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://m.media-amazon.com/images/I/51Ib3jYSStL._AC_UF894,1000_QL80_.jpg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Digital-Music-Player</h3>
