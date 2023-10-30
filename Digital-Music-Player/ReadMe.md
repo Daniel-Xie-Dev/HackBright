@@ -104,7 +104,7 @@ REACT_APP_HOST="YOUR_HOST"
 
 ## Usage
 
-Insert pictures of usages coming soon.
+<iframe src="https://giphy.com/embed/vwSQ5P5nDO3UQhHHy8" width="480" height="260" frameBorder="0" class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/vwSQ5P5nDO3UQhHHy8">via GIPHY</a></p>
 
 ## Contributing
 
