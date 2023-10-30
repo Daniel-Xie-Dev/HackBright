@@ -104,7 +104,9 @@ REACT_APP_HOST="YOUR_HOST"
 
 ## Usage
 
-<iframe src="https://giphy.com/embed/vwSQ5P5nDO3UQhHHy8" width="480" height="260" frameBorder="0" class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/vwSQ5P5nDO3UQhHHy8">via GIPHY</a></p>
+Introductory Page
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/269eca52-ddac-4f01-be69-9a3b57d8ba00)
+
 
 ## Contributing
 
