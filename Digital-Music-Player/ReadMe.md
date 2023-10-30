@@ -107,6 +107,13 @@ REACT_APP_HOST="YOUR_HOST"
 Introductory Page  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/269eca52-ddac-4f01-be69-9a3b57d8ba00)
 
+Creating an account  
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/5ea86bf2-d620-4e92-94b2-8ae8bd1954b9)
+
+Browse music genres  
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/a04a4857-99a9-44d4-8373-ab14197275b3)
+
+
 
 ## Contributing
 
