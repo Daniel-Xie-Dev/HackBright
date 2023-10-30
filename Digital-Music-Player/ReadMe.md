@@ -104,7 +104,7 @@ REACT_APP_HOST="YOUR_HOST"
 
 ## Usage
 
-Introductory Page
+Introductory Page  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/269eca52-ddac-4f01-be69-9a3b57d8ba00)
 
 
