@@ -115,13 +115,13 @@ Browse music genres
 Browse search results and interaction with buttons  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/62cb8cb3-0d4b-40eb-8667-6ad89a2932c4)
 
-Quick playlists navigation
+Quick playlists navigation  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/b556b020-4df2-4043-a607-9b6542a4dc51)
 
-Adding and removing songs to/from Favorites
+Adding and removing songs to/from Favorites  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/759a0d08-6149-48c5-9eaa-3a414814efd9)
 
-Creating new playlists and adding songs to new playlists
+Creating new playlists and adding songs to new playlists  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/9b066371-dbd7-446f-912e-436badc2edaa)
 
 
