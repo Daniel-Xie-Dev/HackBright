@@ -23,7 +23,6 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
-* [Contributing](#contributing)
 * [Authors](#authors)
 * [Acknowledgements](#acknowledgements)
 
@@ -113,15 +112,19 @@ Creating an account
 Browse music genres  
 ![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/a04a4857-99a9-44d4-8373-ab14197275b3)
 
+Browse search results and interaction with buttons  
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/62cb8cb3-0d4b-40eb-8667-6ad89a2932c4)
+
+Quick playlists navigation
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/b556b020-4df2-4043-a607-9b6542a4dc51)
+
+Adding and removing songs to/from Favorites
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/759a0d08-6149-48c5-9eaa-3a414814efd9)
+
+Creating new playlists and adding songs to new playlists
+![giphy](https://github.com/Daniel-Xie-Dev/HackBright/assets/74045563/9b066371-dbd7-446f-912e-436badc2edaa)
 
 
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-* If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/Daniel-Xie-Dev/Digital-Music-Player/issues/new) to discuss it, or directly create a pull request after you edit the *README.md* file with necessary changes.
-* Please make sure you check your spelling and grammar.
-* Create individual PR for each suggestion.
-* Please also read through the [Code Of Conduct](https://github.com/Daniel-Xie-Dev/Digital-Music-Player/blob/main/CODE_OF_CONDUCT.md) before posting your first idea as well.
 
 ### Creating A Pull Request
 
